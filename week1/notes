@@ -1,0 +1,51 @@
+man pwd
+pwd
+ls -l
+mkdir
+mkdir /home/ben/exam1
+ls -l
+cd /home/ben/exam1/
+pwd
+vim 1-1-0.c
+sudo apt install 
+vim 1-1-0.c
+man pwd
+pwd
+ls -l
+mkdir /home/ben/exam1
+ls -l
+cd /home/ben/exam1/
+pwd
+vim 1-1-0.c
+sudo apt-get install vim
+sudo apt install vim
+sudo dpkg --configure -a
+vim 1-1-0.c
+man-db
+vi sudo apt-get install vim-gtk
+vim 1-1-0.c
+ls
+file 1-1-0.c 
+cat 1-1-0.c 
+cat -n 1-1-0.c 
+gcc -E 1-1-0.c -o 1-1-0.i
+sudo apt install gcc
+gcc -E 1-1-0.c -o 1-1-0.i
+./1-1-0
+file 1-1-0.i
+cat -n 1-1-0.i
+gcc -S 1-1-0.i -o 1-1-0.s
+file 1-1-0.s
+cat 1-1-0.s
+gcc -c 1-1-0.i -o 1-1-0.o
+  pluma week12-1.c
+  gcc -share -fPIC -o mylib.so week12-1.c
+  gcc -shared -fPIC -o mylib.so week12-1.c
+  cd week12
+  vi 1-2.c
+  ls
+  ls -l 1-2.c
+  chmod 777 1-2.c
+  ls -l 1-2.c
+  ./1-2.c
+   
