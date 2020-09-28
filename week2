@@ -1,0 +1,39 @@
+ben@ubuntu:~/Desktop/week2$ cat week2.c
+#include"week2.h"
+int main()
+{
+	int ret;
+	ret=write(1, "Hello world!\n",13);
+	exit(0);
+}
+ben@ubuntu:~/Desktop/week2$ time week2
+week2: command not found
+
+real	0m0.126s
+user	0m0.041s
+sys	0m0.032s
+ben@ubuntu:~/Desktop/week2$ echo $path
+
+ben@ubuntu:~/Desktop/week2$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+ben@ubuntu:~/Desktop/week2$ cat week2.c week2.h
+#include"week2.h"
+int main()
+{
+	int ret;
+	ret=write(1, "Hello world!\n",13);
+	exit(0);
+}
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+ben@ubuntu:~/Desktop/week2$ vi week2.c
+ben@ubuntu:~/Desktop/week2$ gcc week2.c -o week2
+ben@ubuntu:~/Desktop/week2$ ./week2
+week2 is running!
+Hello world!
+Terminated
+ben@ubuntu:~/Desktop/week2$ ^
