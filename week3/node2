@@ -1,0 +1,71 @@
+ben@ubuntu:~/Desktop/week3$ vi 3-4.c
+ben@ubuntu:~/Desktop/week3$ gcc -g 3-4.c -o 3-4
+ben@ubuntu:~/Desktop/week3$ ./3-4 123 45646
+[1]:	 123 	3byte
+[2]:	 45646 	5byte
+ben@ubuntu:~/Desktop/week3$ cat 3-4.c
+#include"ch02.h"
+int main(int argc,char *argv[])
+{
+	FILE *fp;
+	//memset(buf,0,sizeof(buf));
+	int i;
+	if((fp=fopen("./text1.txt","w"))==NULL)
+		perror("open failed!\n");
+	//printf("Content is %s\n.The size of stream is %ld bytes.\n",buf,sizeof(buf));
+	for(i=1;i<argc;i++)
+	{
+		fprintf(fp,"%s",argv[i]);
+
+	printf("[%d]:\t %s \t%ldbyte\n",i,argv[i],strlen(argv[i]));
+	}
+        fclose(fp);
+	return 0;
+}	
+
+
+
+
+ben@ubuntu:~/Desktop$ cat 3-4.c 3-5.c
+cat: 3-4.c: No such file or directory
+cat: 3-5.c: No such file or directory
+ben@ubuntu:~/Desktop$ cd week3
+ben@ubuntu:~/Desktop/week3$ cd week3
+bash: cd: week3: No such file or directory
+ben@ubuntu:~/Desktop/week3$ cat 3-4.c 3-5.c
+#include"ch02.h"
+int main()
+{
+	FILE *fp;
+	char buf[80];
+	memset(buf,0,sizeof(buf));
+	int ret;
+	if((fp=fopen("./text1.txt","w"))==NULL)
+		perror("open failed!\n");
+	fgets(buf,sizeof(buf),stdin);
+	printf("Content is %s\n.The size of stream is %ld bytes.\n",buf,sizeof(buf));
+	ret = fwrite(buf,4,sizeof(buf)/4,fp);
+	printf("actual writing number of item is %d\n",ret);
+        fclose(fp);
+	return 0;
+}	
+#include"ch02.h"
+int main(int argc,char *argv[])
+{
+	int i;
+	for(i=0;i<argc;i++)
+		printf("[%d] : %s\n",i,argv[i]);
+	return 0;
+}
+ben@ubuntu:~/Desktop/week3$  ./3-4
+123 456 489
+Content is 123 456 489
+
+.The size of stream is 80 bytes.
+actual writing number of item is 20
+ben@ubuntu:~/Desktop/week3$ ./3-5 223 564 48431
+[0] : ./3-5
+[1] : 223
+[2] : 564
+[3] : 48431
+
