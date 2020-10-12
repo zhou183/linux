@@ -33,4 +33,38 @@ int main()
 	return 0;
 }
 
-ben@ubuntu:~/Desktop/week3$ 
+ben@ubuntu:~/Desktop/week3$ cp 3-2.c ch02.h
+ben@ubuntu:~/Desktop/week3$ vi ch02.h
+ben@ubuntu:~/Desktop/week3$ vi 3-3.c
+ben@ubuntu:~/Desktop/week3$ gcc -g 3-3.c -o 3-3
+3-3.c: In function ‘main’:
+3-3.c:9:2: error: expected expression before ‘|’ token
+  | perror("open failed!\n");
+  ^
+3-3.c:10:6: warning: assignment makes integer from pointer without a cast [-Wint-conversion]
+  ret = fgets(buf,sizeof(buf),stdin);
+      ^
+ben@ubuntu:~/Desktop/week3$ vi 3-3.c
+ben@ubuntu:~/Desktop/week3$ gcc -g 3-3.c -o 3-3
+3-3.c: In function ‘main’:
+3-3.c:10:6: warning: assignment makes integer from pointer without a cast [-Wint-conversion]
+  ret = fgets(buf,sizeof(buf),stdin);
+      ^
+ben@ubuntu:~/Desktop/week3$ ./3-3
+
+actual reading 170132576 chars from input device.Content is 
+
+ben@ubuntu:~/Desktop/week3$ ./3-3
+123 456
+actual reading 1198054272 chars from input device.Content is 123 456
+
+ben@ubuntu:~/Desktop/week3$ vi 3-3.c
+ben@ubuntu:~/Desktop/week3$ gcc -g 3-3.c -o 3-3
+ben@ubuntu:~/Desktop/week3$ vi 3-3.c
+ben@ubuntu:~/Desktop/week3$ ./3-3
+2131 dsdsds
+Content is 2131 dsdsds
+
+ben@ubuntu:~/Desktop/week3$ vi text.txt
+ben@ubuntu:~/Desktop/week3$ vi text1.txt
+
