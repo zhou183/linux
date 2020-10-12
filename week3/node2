@@ -69,3 +69,44 @@ ben@ubuntu:~/Desktop/week3$ ./3-5 223 564 48431
 [2] : 564
 [3] : 48431
 
+
+
+ben@ubuntu:~/Desktop/week3$ cat text3.txt
+cat: text3.txt: No such file or directory
+ben@ubuntu:~/Desktop/week3$ vi 3-7.c
+ben@ubuntu:~/Desktop/week3$ gcc -g 3-7.c -o 3-7
+ben@ubuntu:~/Desktop/week3$ ./3-7
+Segmentation fault
+ben@ubuntu:~/Desktop/week3$ cat 3-7.c
+#include"ch02.h"
+int main()
+{
+	FILE *fp;
+	int fd;
+	fd = open("./text3.txt",O_RDWR);
+	fp=fdopen(fd,"w+");
+	fprintf(fp,"test data %s\n","hello world111a");
+	fclose(fp);
+	return 0;
+}
+
+
+ben@ubuntu:~/Desktop/week3$ cat 3-4.c
+#include"ch02.h"
+int main(int argc,char *argv[])
+{
+	FILE *fp;
+	//memset(buf,0,sizeof(buf));
+	int i;
+	if((fp=fopen("./text1.txt","w"))==NULL)
+		perror("open failed!\n");
+	//printf("Content is %s\n.The size of stream is %ld bytes.\n",buf,sizeof(buf));
+	for(i=1;i<argc;i++)
+	{
+		fprintf(fp,"%s",argv[i]);
+
+	printf("[%d]:\t %s \t%ldbyte\n",i,argv[i],strlen(argv[i]));
+	}
+        fclose(fp);
+	return 0;
+}	
