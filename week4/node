@@ -108,3 +108,275 @@ int main(void)
 	return 0;
 }
 
+
+
+
+
+ben@ubuntu:~/Desktop/week4$ cp week4-2.c week4-3.c
+ben@ubuntu:~/Desktop/week4$ vi week4-3.c
+ben@ubuntu:~/Desktop/week4$ gcc -g week4-3.c -o week4-3
+ben@ubuntu:~/Desktop/week4$ ./4-3
+bash: ./4-3: No such file or directory
+ben@ubuntu:~/Desktop/week4$ ./week4-3
+ben@ubuntu:~/Desktop/week4$ ls -l
+total 60
+-rw-rw-r-- 1 ben ben  1822 Oct 19 16:57 ch03.h
+-rw-r--r-- 1 ben ben    50 Oct 19 17:06 file.hole
+-rw-r--r-- 1 ben ben    50 Oct 19 21:45 file.hole.1
+-rwxrwxr-x 1 ben ben 11368 Oct 19 16:40 week4-1
+-rw-rw-r-- 1 ben ben   501 Oct 19 16:32 week4-1.c
+-rwxrwxr-x 1 ben ben 11368 Oct 19 17:05 week4-2
+-rw-rw-r-- 1 ben ben   363 Oct 19 17:05 week4-2.c
+-rwxrwxr-x 1 ben ben 11368 Oct 19 21:44 week4-3
+-rw-rw-r-- 1 ben ben   365 Oct 19 21:44 week4-3.c
+ben@ubuntu:~/Desktop/week4$ od -c file.hole.1
+0000000   a   b   c   d   e   f   g   h   i   j  \0  \0  \0  \0  \0  \0
+0000020  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0
+0000040  \0  \0  \0  \0  \0  \0  \0  \0   0   1   2   3   4   5   6   7
+0000060   8   9
+0000062
+ben@ubuntu:~/Desktop/week4$ vi week4-4.c
+ben@ubuntu:~/Desktop/week4$ gcc -g week4-4.c -o week4-4
+week4-4.c:1:10: fatal error: ch02.h: No such file or directory
+ #include "ch02.h"
+          ^~~~~~~~
+compilation terminated.
+ben@ubuntu:~/Desktop/week4$ vi week4-4.c
+ben@ubuntu:~/Desktop/week4$ gcc -g week4-4.c -o week4-4
+ben@ubuntu:~/Desktop/week4$ ./week4-4
+d1=3,d2=4
+buf:abcd
+ben@ubuntu:~/Desktop/week4$ cat week4-3.c week4-4.c
+#include "ch03.h"
+char buf1[]="abcdefghij";
+char buf2[]="0123456789";
+int main(void)
+{
+	int fd;
+	if((fd =open("file.hole.1",O_WRONLY|O_CREAT,0644))<0)
+		err_exit("CREATE error!");
+	if(write(fd,buf1,10)!=10)
+		err_exit("Write error!");
+	if(lseek(fd,40,SEEK_SET)==-1)
+		err_exit("Lseek error!");
+	if(write(fd,buf2,10)!=10)
+		err_exit("Write error!");
+	return 0;
+}
+		
+#include "ch03.h"
+int main()
+{
+    int d1,d2;
+    char buf[5];
+    memset(buf,0,5);
+    d1=open("file.hole",O_RDONLY);
+    d2=open("file.hole",O_RDONLY);
+    printf("d1=%d,d2=%d\n",d1,d2);
+    lseek(d1,5,SEEK_SET);
+    read(d2,buf,4);
+    printf("buf:%s\n",buf);
+    return 0;
+}
+
+
+
+
+ben@ubuntu:~/Desktop/week4$ vi week4-5.c
+ben@ubuntu:~/Desktop/week4$ gcc -g week4-5.c -o week4-5
+ben@ubuntu:~/Desktop/week4$ ./week4-5
+d1=3,d2=4
+buf:fghi
+ben@ubuntu:~/Desktop/week4$ cp week4-5.c week4-6.c
+ben@ubuntu:~/Desktop/week4$ vi week4-6.c
+ben@ubuntu:~/Desktop/week4$ gcc -g week4-6.c -o week4-6
+ben@ubuntu:~/Desktop/week4$ ./week4-6
+Redirect stdout file!
+ben@ubuntu:~/Desktop/week4$ cat out.info
+ben@ubuntu:~/Desktop/week4$ ls -l
+total 108
+-rw-rw-r-- 1 ben ben  1822 Oct 19 16:57 ch03.h
+-rw-r--r-- 1 ben ben    50 Oct 19 17:06 file.hole
+-rw-r--r-- 1 ben ben    50 Oct 19 21:45 file.hole.1
+-rw-r--r-- 1 ben ben     0 Oct 19 22:08 out.info
+-rwxrwxr-x 1 ben ben 11368 Oct 19 16:40 week4-1
+-rw-rw-r-- 1 ben ben   501 Oct 19 16:32 week4-1.c
+-rwxrwxr-x 1 ben ben 11368 Oct 19 17:05 week4-2
+-rw-rw-r-- 1 ben ben   363 Oct 19 17:05 week4-2.c
+-rwxrwxr-x 1 ben ben 11368 Oct 19 21:44 week4-3
+-rw-rw-r-- 1 ben ben   365 Oct 19 21:44 week4-3.c
+-rwxrwxr-x 1 ben ben 11384 Oct 19 21:47 week4-4
+-rw-rw-r-- 1 ben ben   279 Oct 19 21:47 week4-4.c
+-rwxrwxr-x 1 ben ben 11424 Oct 19 21:53 week4-5
+-rw-rw-r-- 1 ben ben   260 Oct 19 21:52 week4-5.c
+-rwxrwxr-x 1 ben ben 11104 Oct 19 22:07 week4-6
+-rw-rw-r-- 1 ben ben   155 Oct 19 22:07 week4-6.c
+ben@ubuntu:~/Desktop/week4$ vi week4-6.c
+ben@ubuntu:~/Desktop/week4$ gcc week4-6.c -o week4-6
+ben@ubuntu:~/Desktop/week4$ ./week4-6
+Redirect stdout file!
+ben@ubuntu:~/Desktop/week4$ cat out.info
+ben@ubuntu:~/Desktop/week4$ vi week4-6.c
+ben@ubuntu:~/Desktop/week4$ gcc week4-6.c -o week4-6
+week4-6.c: In function ‘main’:
+week4-6.c:6:5: error: too many arguments to function ‘dup’
+     dup(d1,1);
+     ^~~
+In file included from ch03.h:4:0,
+                 from week4-6.c:1:
+/usr/include/unistd.h:534:12: note: declared here
+ extern int dup (int __fd) __THROW __wur;
+            ^~~
+ben@ubuntu:~/Desktop/week4$ vi week4-6.c
+ben@ubuntu:~/Desktop/week4$ gcc week4-6.c -o week4-6
+week4-6.c: In function ‘main’:
+week4-6.c:6:5: warning: implicit declaration of function ‘dup22’; did you mean ‘dup2’? [-Wimplicit-function-declaration]
+     dup22(d1,1);
+     ^~~~~
+     dup2
+/tmp/ccdBu1bb.o: In function `main':
+week4-6.c:(.text+0x51): undefined reference to `dup22'
+collect2: error: ld returned 1 exit status
+ben@ubuntu:~/Desktop/week4$ gcc week4-6.c -o week4-6
+week4-6.c: In function ‘main’:
+week4-6.c:6:5: warning: implicit declaration of function ‘dup22’; did you mean ‘dup2’? [-Wimplicit-function-declaration]
+     dup22(d1,1);
+     ^~~~~
+     dup2
+/tmp/ccbSYJfa.o: In function `main':
+week4-6.c:(.text+0x51): undefined reference to `dup22'
+collect2: error: ld returned 1 exit status
+ben@ubuntu:~/Desktop/week4$ vi week4-6.c
+ben@ubuntu:~/Desktop/week4$ gcc week4-6.c -o week4-6
+ben@ubuntu:~/Desktop/week4$ ./week4-6
+ben@ubuntu:~/Desktop/week4$ cat out.info
+Redirect stdout file!
+ben@ubuntu:~/Desktop/week4$ cat week4-5.c week4-6.c
+#include "ch03.h"
+int main()
+{
+    int d1,d2;
+    char buf[5];
+    memset(buf,0,5);
+    d1=open("file.hole",O_RDONLY);
+    d2=dup(d1);
+    printf("d1=%d,d2=%d\n",d1,d2);
+    lseek(d1,5,SEEK_SET);
+    read(d2,buf,4);
+    printf("buf:%s\n",buf);
+    return 0;
+}
+#include "ch03.h"
+int main()
+{
+    int d1;
+    d1=open("./out.info",O_CREAT|O_TRUNC|O_WRONLY,0644);
+    dup2(d1,1);
+    d1=dup(STDOUT_FILENO);
+    printf("Redirect stdout file!\n");
+    return 0;
+}
+
+
+
+
+
+
+
+ben@ubuntu:~/Desktop/week4$ vi write1.c
+ben@ubuntu:~/Desktop/week4$ gcc write1.c -o write1
+write1.c: In function ‘main’:
+write1.c:7:2: error: expected ‘;’ before ‘for’
+  for(i=0;i<2;i++)
+  ^~~
+ben@ubuntu:~/Desktop/week4$ vi write1.c
+ben@ubuntu:~/Desktop/week4$ gcc write1.c -o write1
+write1.c: In function ‘main’:
+write1.c:9:9: warning: implicit declaration of function ‘time’; did you mean ‘nice’? [-Wimplicit-function-declaration]
+   srand(time(0));
+         ^~~~
+         nice
+ben@ubuntu:~/Desktop/week4$ vi ch03.h
+ben@ubuntu:~/Desktop/week4$ gcc write1.c -o write1
+ben@ubuntu:~/Desktop/week4$ ./write1
+
+ben@ubuntu:~/Desktop/week4$ ^C
+ben@ubuntu:~/Desktop/week4$ vi write1.c
+ben@ubuntu:~/Desktop/week4$ gcc write1.c -o write1
+ben@ubuntu:~/Desktop/week4$ ./write1
+write1:c
+write1:o
+ben@ubuntu:~/Desktop/week4$ stat test.dat
+  File: test.dat
+  Size: 11        	Blocks: 8          IO Block: 4096   regular file
+Device: 801h/2049d	Inode: 7078661     Links: 1
+Access: (0644/-rw-r--r--)  Uid: ( 1000/     ben)   Gid: ( 1000/     ben)
+Access: 2020-10-19 22:48:28.516717925 +1400
+Modify: 2020-10-19 22:48:24.872717752 +1400
+Change: 2020-10-19 22:48:24.872717752 +1400
+ Birth: -
+ben@ubuntu:~/Desktop/week4$ vi week4-7.c
+ben@ubuntu:~/Desktop/week4$ gcc week4-7.c -o week4-7
+ben@ubuntu:~/Desktop/week4$ ./week4-7
+fd=3ben@ubuntu:~/Desktop/week4$ vi week4-7.c
+ben@ubuntu:~/Desktop/week4$ gcc week4-7.c -o week4-7
+ben@ubuntu:~/Desktop/week4$ ./week4-7
+fd=3
+ben@ubuntu:~/Desktop/week4$ cat week4-7.c
+#include"ch03.h"
+int main()
+{
+	FILE *fp;
+	int fd;
+	fp=fopen("./ch03.h","r");
+	fd=fileno(fp);
+	printf("fd=%d\n",fd);
+	return 0;
+}
+ben@ubuntu:~/Desktop/week4$ cat write1.c
+#include"ch03.h"
+int main()
+{
+	int n,i,fd;
+	char buf;
+	fd=open("./test.dat",O_CREAT|O_WRONLY,0644);
+	for(i=0;i<2;i++)
+	{
+		srand(time(0));
+		n=rand()%26;
+		buf=(char)('a'+n);
+		printf("write1:%c\n",buf);
+		write(fd,&buf,1);
+		lseek(fd,10,SEEK_SET);
+		sleep(50);
+	}
+	close(fd);
+	return 0;
+}
+ben@ubuntu:~/Desktop/week4$ cat week4-6.c
+#include "ch03.h"
+int main()
+{
+    int d1;
+    d1=open("./out.info",O_CREAT|O_TRUNC|O_WRONLY,0644);
+    dup2(d1,1);
+    d1=dup(STDOUT_FILENO);
+    printf("Redirect stdout file!\n");
+    return 0;
+}
+ben@ubuntu:~/Desktop/week4$ 
+
+
+ben@ubuntu:~/Desktop/week4$ od -c test.dat
+0000000   c   k
+0000002
+ben@ubuntu:~/Desktop/week4$ od -c test.dat
+0000000   c   k  \0  \0  \0  \0  \0  \0  \0  \0   o
+0000013
+ben@ubuntu:~/Desktop/week4$ od -c test.dat
+0000000   c   k  \0  \0  \0  \0  \0  \0  \0  \0   o
+0000013
+ben@ubuntu:~/Desktop/week4$ 
+
+
+
