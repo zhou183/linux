@@ -922,5 +922,51 @@ extern unsigned int _Cdecl _default87;
     
     
   2-7 编写程序说明gets()函数的危险性。
+  
+  ben@ubuntu:~/Desktop$ mkdir homework
+ben@ubuntu:~/Desktop$ cd homework
+ben@ubuntu:~/Desktop/homework$ vi 1.c
+ben@ubuntu:~/Desktop/homework$ gcc -g 1.c -o 1
+1.c: In function ‘main’:
+1.c:16:9: warning: implicit declaration of function ‘gets’; did you mean ‘fgets’? [-Wimplicit-function-declaration]
+         gets(buffer.buf);
+         ^~~~
+         fgets
+/tmp/ccarwJxT.o: In function `main':
+/home/ben/Desktop/homework/1.c:16: warning: the `gets' function is dangerous and should not be used.
+ben@ubuntu:~/Desktop/homework$ cat 1.c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define BUF_SIZE 8
+int main(void)
+{
+	FILE *fd;
+   	int fgets_yes;
+ 	struct iobuf 
+	{
+    		char buf[BUF_SIZE];
+   		char others[BUF_SIZE];
+   	}buffer;
+  	memset(&buffer,'\0',sizeof(struct iobuf)); 
+        fprintf(stdout,"please enter a line\n");
+        gets(buffer.buf);
+        fprintf(stdout,"gets() get string \"%s\"\n",buffer.buf);
+        /* 查看溢出情况 */
+        fprintf(stdout,"buffer.others is \"%s\"\n",buffer.others);
+  	exit(0);
+}
+
+ben@ubuntu:~/Desktop/homework$ ./1
+please enter a line
+123456789
+gets() get string "123456789"
+buffer.others is "9"
+
+ 定义一个结构体类型，将两个数组结合在一起，当输入字符超过buf的大小时，gets()会导致数据溢出到成员others中。
+
+  
+  
+  
   设某个文件含n个记录，文件的第一个字(4字节）给出记录的总个数n，随后的n个字给出各个记录的长度（字节数)，剩余部分则由各个记录组成。
                  编写一个根据文件指针和记录编号（从Ⅰ开始编号）读取第k个记录的函数。
