@@ -1,0 +1,164 @@
+ben@ubuntu:~/Desktop/week5$ cp ../week4/*.h ch05.h
+ben@ubuntu:~/Desktop/week5$ ls
+ch05.h
+ben@ubuntu:~/Desktop/week5$ vi 5-1.c
+ben@ubuntu:~/Desktop/week5$ gcc -g 5-1.c -o 5-1
+ben@ubuntu:~/Desktop/week5$ ./5-1
+^C
+ben@ubuntu:~/Desktop/week5$ vi 5-1.c
+ben@ubuntu:~/Desktop/week5$ cp 5-1.c 5-1-1.c
+ben@ubuntu:~/Desktop/week5$ vi 5-1-1.c
+ben@ubuntu:~/Desktop/week5$ gcc -g 5-1-1.c -o 5-1-1
+ben@ubuntu:~/Desktop/week5$ ./5-1-1
+hello world!ben@ubuntu:~/Desktop/week5$ 
+ben@ubuntu:~/Desktop/week5$ cp 5-1-1.c 5-1-2.c
+ben@ubuntu:~/Desktop/week5$ vi 5-1-2.c
+ben@ubuntu:~/Desktop/week5$ gcc -g 5-1-2.c -o 5-1-2
+ben@ubuntu:~/Desktop/week5$ ./5-1-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                hello world!ben@ubuntu:~/Desktop/week5$ 
+ben@ubuntu:~/Desktop/week5$ cat ch05.h 5-1.c 5-1-1.c 
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<time.h>
+void err_exit(char *s)
+{
+	printf("USAGE : *s is faile!\n");
+}
+
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                     
+                                                                                                                                        
+ 
+#include"ch05.h"
+int main()
+{
+	printf("hello world!");
+	while(1);
+	return 0;
+}
+
+#include"ch05.h"
+int main()
+{
+	printf("hello world!");
+	//while(1);
+	return 0;
+}
+
+ben@ubuntu:~/Desktop/week5$ cat 5-1-2.c
+#include"ch05.h"
+int main()
+{	
+	int i;
+	for(i=0;i<1024;i++){
+		printf(" ");
+	}
+
+	printf("hello world!");
+	//while(1);
+	return 0;
+}
+
+
+
+
+
+
+ben@ubuntu:~/Desktop/week5$ vi 5-2.c
+ben@ubuntu:~/Desktop/week5$ gcc 5-2.c -o 5-2
+ben@ubuntu:~/Desktop/week5$ ./5-2
+After write
+ben@ubuntu:~/Desktop/week5$ cat test1.txt test2.txt
+Hello world!
+Hello world!
+ben@ubuntu:~/Desktop/week5$ cat 5-2.c
+#include"ch05.h"
+int main()
+{
+	int fd;
+	FILE *fp;
+	char *s="Hello world!\n";
+	if((fd=open("./test1.txt",O_CREAT|O_WRONLY,0644))==-1)
+	{
+		printf("Error to create file\n");
+		exit(1);
+	}
+	if ((fp=fopen("./test2.txt","w+"))==NULL)
+	{
+		printf("Error create file\n");
+		exit(1);
+	}
+	sleep(15);
+	write(fd,s,strlen(s));
+	fwrite(s,sizeof(char),strlen(s),fp);
+	printf("After write\n");
+	sleep(15);
+	close(fd);
+	return 0;
+}
+
+ben@ubuntu:~/Desktop/week5$ cat 5-1-3.c 5-1-4.c
+#include"ch05.h"
+int main()
+{
+	setvbuf(stdout,NULL,_IONBF,0);
+	printf("hello world!");
+	while(1);
+	return 0;
+}
+
+#include"ch05.h"
+int main()
+{
+	printf("hello world!");
+	fclose(stdout);
+	//fflush(stdout);
+	while(1);
+	return 0;
+}
+
+
+
+
+
+ben@ubuntu:~/Desktop/week5$ ls
+5-1  5-1-1  5-1-1.c  5-1-2  5-1-2.c  5-1-3  5-1-3.c  5-1-4  5-1-4.c  5-1.c  5-2  5-2.c  ch05.h  test1.txt  test2.txt
+ben@ubuntu:~/Desktop/week5$ vi 5-3.c
+ben@ubuntu:~/Desktop/week5$ gcc 5-3.c -o 5-3
+ben@ubuntu:~/Desktop/week5$ ./5-3
+We write 1 byte
+We read ,ret is 0
+ben@ubuntu:~/Desktop/week5$ cat 5-3.c
+#include"ch05.h"
+int main()
+{
+	char buf[20];
+	int ret;
+	FILE *fp=fopen("./tmp.txt","w+");
+	if(!fp){
+		printf("Fail to open file!\n");
+		exit(-1);
+	}
+	ret = fwrite("123",sizeof("123"),1,fp);
+	printf("We write %d byte\n",ret);
+	memset(buf,0,sizeof(buf));
+	ret = fread(buf,1,1,fp);
+	printf("We read %s,ret is %d\n",buf,ret);
+	fwrite("456",sizeof("456"),1,fp);
+	fclose(fp);
+	return 0;
+}
