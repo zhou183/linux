@@ -109,3 +109,254 @@ int main(void)
 
 
 
+
+
+
+ben@ubuntu:~/Desktop/week6$ vi 6-6.c
+ben@ubuntu:~/Desktop/week6$ gcc -g 6-6.c -o 6-6
+ben@ubuntu:~/Desktop/week6$ ./6-6
+environ[0]=CLUTTER_IM_MODULE=xim
+environ[1]=LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+environ[2]=LESSCLOSE=/usr/bin/lesspipe %s %s
+environ[3]=LANG=en_US.UTF-8
+environ[4]=GDM_LANG=en_US
+environ[5]=DISPLAY=:0.0
+environ[6]=GTK_OVERLAY_SCROLLING=0
+environ[7]=COLORTERM=truecolor
+environ[8]=XDG_VTNR=7
+environ[9]=SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+environ[10]=MANDATORY_PATH=/usr/share/gconf/ukui.mandatory.path
+environ[11]=XDG_SESSION_ID=c2
+environ[12]=XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/ben
+environ[13]=USER=ben
+environ[14]=DESKTOP_SESSION=ukui
+environ[15]=QT4_IM_MODULE=fcitx
+environ[16]=TEXTDOMAINDIR=/usr/share/locale/
+environ[17]=DEFAULTS_PATH=/usr/share/gconf/ukui.default.path
+environ[18]=PWD=/home/ben/Desktop/week6
+environ[19]=HOME=/home/ben
+environ[20]=TEXTDOMAIN=im-config
+environ[21]=SSH_AGENT_PID=1101
+environ[22]=QT_ACCESSIBILITY=1
+environ[23]=XDG_SESSION_TYPE=x11
+environ[24]=XDG_DATA_DIRS=/usr/share/ukui:/usr/share/ukui:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+environ[25]=XDG_SESSION_DESKTOP=ukui
+environ[26]=GTK_MODULES=gail:atk-bridge
+environ[27]=TERM=xterm
+environ[28]=SHELL=/bin/bash
+environ[29]=VTE_VERSION=5202
+environ[30]=XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+environ[31]=QT_IM_MODULE=fcitx
+environ[32]=XMODIFIERS=@im=fcitx
+environ[33]=IM_CONFIG_PHASE=2
+environ[34]=XDG_CURRENT_DESKTOP=UKUI
+environ[35]=GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+environ[36]=XDG_SEAT=seat0
+environ[37]=SHLVL=1
+environ[38]=LANGUAGE=en_US
+environ[39]=WINDOWID=75497478
+environ[40]=GDMSESSION=ukui
+environ[41]=GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+environ[42]=LOGNAME=ben
+environ[43]=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+environ[44]=XDG_RUNTIME_DIR=/run/user/1000
+environ[45]=XAUTHORITY=/home/ben/.Xauthority
+environ[46]=XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+environ[47]=XDG_CONFIG_DIRS=/etc/xdg/xdg-ukui:/etc/xdg
+environ[48]=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+environ[49]=SESSION_MANAGER=local/ubuntu:@/tmp/.ICE-unix/1006,unix/ubuntu:/tmp/.ICE-unix/1006
+environ[50]=LESSOPEN=| /usr/bin/lesspipe %s
+environ[51]=GTK_IM_MODULE=fcitx
+environ[52]=_=./6-6
+environ[53]=OLDPWD=/home/ben/Desktop
+env[0]=CLUTTER_IM_MODULE=xim
+env[1]=LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+env[2]=LESSCLOSE=/usr/bin/lesspipe %s %s
+env[3]=LANG=en_US.UTF-8
+env[4]=GDM_LANG=en_US
+env[5]=DISPLAY=:0.0
+env[6]=GTK_OVERLAY_SCROLLING=0
+env[7]=COLORTERM=truecolor
+env[8]=XDG_VTNR=7
+env[9]=SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+env[10]=MANDATORY_PATH=/usr/share/gconf/ukui.mandatory.path
+env[11]=XDG_SESSION_ID=c2
+env[12]=XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/ben
+env[13]=USER=ben
+env[14]=DESKTOP_SESSION=ukui
+env[15]=QT4_IM_MODULE=fcitx
+env[16]=TEXTDOMAINDIR=/usr/share/locale/
+env[17]=DEFAULTS_PATH=/usr/share/gconf/ukui.default.path
+env[18]=PWD=/home/ben/Desktop/week6
+env[19]=HOME=/home/ben
+env[20]=TEXTDOMAIN=im-config
+env[21]=SSH_AGENT_PID=1101
+env[22]=QT_ACCESSIBILITY=1
+env[23]=XDG_SESSION_TYPE=x11
+env[24]=XDG_DATA_DIRS=/usr/share/ukui:/usr/share/ukui:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+env[25]=XDG_SESSION_DESKTOP=ukui
+env[26]=GTK_MODULES=gail:atk-bridge
+env[27]=TERM=xterm
+env[28]=SHELL=/bin/bash
+env[29]=VTE_VERSION=5202
+env[30]=XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+env[31]=QT_IM_MODULE=fcitx
+env[32]=XMODIFIERS=@im=fcitx
+env[33]=IM_CONFIG_PHASE=2
+env[34]=XDG_CURRENT_DESKTOP=UKUI
+env[35]=GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+env[36]=XDG_SEAT=seat0
+env[37]=SHLVL=1
+env[38]=LANGUAGE=en_US
+env[39]=WINDOWID=75497478
+env[40]=GDMSESSION=ukui
+env[41]=GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+env[42]=LOGNAME=ben
+env[43]=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+env[44]=XDG_RUNTIME_DIR=/run/user/1000
+env[45]=XAUTHORITY=/home/ben/.Xauthority
+env[46]=XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+env[47]=XDG_CONFIG_DIRS=/etc/xdg/xdg-ukui:/etc/xdg
+env[48]=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+env[49]=SESSION_MANAGER=local/ubuntu:@/tmp/.ICE-unix/1006,unix/ubuntu:/tmp/.ICE-unix/1006
+env[50]=LESSOPEN=| /usr/bin/lesspipe %s
+env[51]=GTK_IM_MODULE=fcitx
+env[52]=_=./6-6
+env[53]=OLDPWD=/home/ben/Desktop
+PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+ben@ubuntu:~/Desktop/week6$ cat 6-6.c
+#include"ch06.h"
+int main(int argc,char *argv[],char *env[])
+{
+	extern char ** environ;
+	int i;
+	for(i=0;environ[i];i++)
+	{
+		printf("environ[%d]=%s\n",i,environ[i]);
+	}
+	for(i=0;env[i];i++)
+	{
+		printf("env[%d]=%s\n",i,env[i]);
+	}
+	printf("PATH = %s\n",getenv("PATH"));
+	return 0;
+}
+
+
+
+
+ben@ubuntu:~/Desktop/week6$ mkdir dllib
+ben@ubuntu:~/Desktop/week6$ cd dllib
+ben@ubuntu:~/Desktop/week6/dllib$ pwd
+/home/ben/Desktop/week6/dllib
+ben@ubuntu:~/Desktop/week6/dllib$ vi dlib.c
+ben@ubuntu:~/Desktop/week6/dllib$ pwd
+/home/ben/Desktop/week6/dllib
+ben@ubuntu:~/Desktop/week6/dllib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week6/dllib$ ls
+dlib.c  libdlib.so
+ben@ubuntu:~/Desktop/week6/dllib$ file lindlib.so
+lindlib.so: cannot open `lindlib.so' (No such file or directory)
+ben@ubuntu:~/Desktop/week6/dllib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=d5c679bc5fb1248b428cbecda0b94689a3f6c89f, not stripped
+ben@ubuntu:~/Desktop/week6/dllib$ vi test.c
+ben@ubuntu:~/Desktop/week6/dllib$ gcc test.c -o test
+/tmp/ccVY3SFW.o: In function `main':
+test.c:(.text+0x20): undefined reference to `dynamic_lib_call'
+collect2: error: ld returned 1 exit status
+ben@ubuntu:~/Desktop/week6/dllib$ gcc -Wall test.c -o test -L ./ -ldlib
+ben@ubuntu:~/Desktop/week6/dllib$ ls
+dlib.c  libdlib.so  test  test.c
+ben@ubuntu:~/Desktop/week6/dllib$ ./test
+./test: error while loading shared libraries: libdlib.so: cannot open shared object file: No such file or directory
+ben@ubuntu:~/Desktop/week6/dllib$ sudo cp ./libdlib.so /usr/lib
+[sudo] password for ben: 
+1Sorry, try again.
+[sudo] password for ben: 
+123
+Sorry, try again.
+[sudo] password for ben: 
+ben@ubuntu:~/Desktop/week6/dllib$ ./test
+Dynamic lib is called!
+ben@ubuntu:~/Desktop/week6/dllib$ ldd ./test
+	linux-vdso.so.1 (0x00007fff04dd3000)
+	libdlib.so => /usr/lib/libdlib.so (0x00007fdc6616b000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fdc65d7a000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fdc6656f000)
+ben@ubuntu:~/Desktop/week6/dllib$ 
+ben@ubuntu:~/Desktop/week6/dllib$ cat test.c
+#include"../ch06.h"
+extern void dynamic_lib_call(void);
+int main()
+{
+	dynamic_lib_call();
+	return 0;
+}
+ben@ubuntu:~/Desktop/week6/dllib$ cat dlib.c
+#include"../ch06.h"
+void dynamic_lib_call(void)
+{
+	printf("Dynamic lib is called!\n");
+}
+
+
+
+
+
+
+
+
+ben@ubuntu:~/Desktop/week6/dllib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week6/dllib$ gcc -Wall test.c -o test -L ./ -ldlib
+ben@ubuntu:~/Desktop/week6/dllib$ sudo cp ./libdlib.so /usr/lib
+ben@ubuntu:~/Desktop/week6/dllib$ ./test
+Dynamic lib is called!
+sum=45ben@ubuntu:~/Desktop/week6/d
+ben@ubuntu:~/Desktop/week6/dllib$ vi dlib.c
+ben@ubuntu:~/Desktop/week6/dllib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week6/dllib$ gcc -Wall test.c -o test -L ./ -ldlib
+ben@ubuntu:~/Desktop/week6/dllib$ sudo cp ./libdlib.so /usr/lib
+ben@ubuntu:~/Desktop/week6/dllib$ ./test
+Dynamic lib is called!
+sum=55
+ben@ubuntu:~/Desktop/week6/dllib$ cat dlib.c test1.c test.c
+#include"../ch06.h"
+void dynamic_lib_call(void)
+{
+	printf("Dynamic lib is called!\n");
+}
+void sum(int max){
+	int sum=0;
+	for(int i=1;i<=max;i++)
+	{
+		sum=sum+i;
+	}
+	printf("sum=%d\n",sum);
+}
+#include"../ch06.h"
+int main()
+{
+	void *dlib=dlopen("./libdlib.so",RTLD_NOW);
+	if(!dlib){
+		printf("dlopen failed!\n");
+		exit(-1);
+	}
+	void(*dfunc) (void)=dlsym(dlib,"dynamic_lib_call");
+	if(!dfunc){
+                printf("dfunc failed!\n");
+                exit(-1);
+        }
+	dfunc();
+	dlclose(dlib);
+	return 0;
+}
+#include"../ch06.h"
+extern void dynamic_lib_call(void);
+extern void sum(int max);
+int main()
+{
+	dynamic_lib_call();
+	sum(10);
+	return 0;
+}
+
