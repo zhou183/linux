@@ -1,1 +1,111 @@
+ben@ubuntu:~/Desktop/week6$ vi 6-1.c
+ben@ubuntu:~/Desktop/week6$ gcc -g 6-1.c -o 6-1
+ben@ubuntu:~/Desktop/week6$ ./6-1
+-----------Before main------------
+------------Main function---------
+ben@ubuntu:~/Desktop/week6$ cat 6-1.c
+#include"ch06.h"
+static void __attribute__ ((constructor)) before_main()
+{
+	printf("-----------Before main------------\n");
+}
+int main()
+{
+	printf("------------Main function---------\n");
+	return 0;
+}
+
+
+
+
+
+
+ben@ubuntu:~/Desktop/week6$ vi 6-2.c
+ben@ubuntu:~/Desktop/week6$ gcc -g 6-2.c -o 6-2
+ben@ubuntu:~/Desktop/week6$ ./6-2
+argc[0]:./6-2
+ben@ubuntu:~/Desktop/week6$ ./6-2 45 2 55 6 4
+argc[0]:./6-2
+argc[1]:45
+argc[2]:2
+argc[3]:55
+argc[4]:6
+argc[5]:4
+ben@ubuntu:~/Desktop/week6$ cat 6-2.c
+#include"ch06.h"
+int main (int argc,char *argv[])
+{
+	for(int i =0;i<argc;i++)
+	{
+		printf("argc[%d]:%s\n",i,argv[i]);
+	}
+	return 0;
+}
+
+
+
+
+ben@ubuntu:~/Desktop/week6$ ./6-3
+error!
+ben@ubuntu:~/Desktop/week6$ ./6-3 45 6546
+45 + 6546 =6591
+ben@ubuntu:~/Desktop/week6$ cat 6-3.c
+#include"ch06.h"
+int main(int argc,char *argv[])
+{
+	int x,y;
+	if(argc!=3)
+	{
+		printf("error!\n");
+		exit(1);
+	}
+	x=atoi(argv[1]);
+	y=atoi(argv[2]);
+	printf("%d + %d =%d\n",x,y,x+y);
+	return 0;
+}
+
+
+
+
+
+
+ben@ubuntu:~/Desktop/week6$ ./6-4
+-----------Before main------------
+---Main exit------------callback3-------
+--------callback2-------
+--------callback1-------
+-----------After main------------
+ben@ubuntu:~/Desktop/week6$ cat 6-4.c
+#include"ch06.h"
+static void __attribute__ ((constructor)) before_main()
+{
+	printf("-----------Before main------------\n");
+}
+static void __attribute__ ((destructor)) after_main()
+{
+	printf("-----------After main------------\n");
+}
+static void callback1(void)
+{
+	printf("--------callback1-------\n");
+}
+static void callback2(void)
+{       
+        printf("--------callback2-------\n");
+}
+static void callback3(void)
+{
+        printf("--------callback3-------\n");
+}
+int main(void)
+{
+	atexit(callback1);
+	atexit(callback2);
+	atexit(callback3);
+	printf("---Main exit----");
+	exit(0);
+}
+
+
 
