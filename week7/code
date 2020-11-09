@@ -1,0 +1,342 @@
+@ubuntu:~/Desktop$ mkdir week7
+ben@ubuntu:~/Desktop$ cd week7
+ben@ubuntu:~/Desktop/week7$ cd ..
+ben@ubuntu:~/Desktop$ cp week6/*.h week7
+ben@ubuntu:~/Desktop$ cd week7
+ben@ubuntu:~/Desktop/week7$ ls
+ch06.h
+ben@ubuntu:~/Desktop/week7$ mv ch06.h ch07.h
+ben@ubuntu:~/Desktop/week7$ vi ch07.h
+ben@ubuntu:~/Desktop/week7$ mkdir lib
+ben@ubuntu:~/Desktop/week7$ pwd
+/home/ben/Desktop/week7
+ben@ubuntu:~/Desktop/week7$ ls
+ch07.h  lib
+ben@ubuntu:~/Desktop/week7$ cd lib
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week7/lib$ ls
+dlib.c  libdlib.so
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=577b51b8e5fb7861bbce127ed1e87643a273b312, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ vi test_dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_dlib.c -o test_dlib -L ./ -ldlib
+test_dlib.c:1:21: error: missing terminating > character
+ #include<"../ch07.h"
+                     ^
+test_dlib.c:1:9: fatal error: "../ch07.h": No such file or directory
+ #include<"../ch07.h"
+         ^
+compilation terminated.
+ben@ubuntu:~/Desktop/week7/lib$ vi test_dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_dlib.c -o test_dlib -L ./ -ldlib
+/tmp/ccR8FfoC.o: In function `main':
+test_dlib.c:(.text+0x20): undefined reference to `dynamic_lib_fun_call'
+collect2: error: ld returned 1 exit status
+ben@ubuntu:~/Desktop/week7/lib$ cp test_dlib.c test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ rm test_dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ ls
+dlib.c  libdlib.so  test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=e0edc103b23860473d22e6f8a67a99fa604df5d5, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_dlib.c -o test_dlib -L ./ -ldlib
+gcc: error: test_dlib.c: No such file or directory
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+ben@ubuntu:~/Desktop/week7/lib$ ldd ./test_lib
+	linux-vdso.so.1 (0x00007ffc5ebdc000)
+	libdlib.so => /usr/lib/libdlib.so (0x00007fc09f1a5000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc09edb4000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fc09f5a9000)
+ben@ubuntu:~/Desktop/week7/lib$ vi test.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc test.c -o test
+test.c: In function ‘main’:
+test.c:9:32: error: ‘dlib’ undeclared (first use in this function); did you mean ‘div’?
+         void(*fp) (void)=dlsym(dlib,"dynamic_lib_fun__call");
+                                ^~~~
+                                div
+test.c:9:32: note: each undeclared identifier is reported only once for each function it appears in
+test.c:14:9: warning: implicit declaration of function ‘dynamic_lib_fun_call_’ [-Wimplicit-function-declaration]
+         dynamic_lib_fun_call_();
+         ^~~~~~~~~~~~~~~~~~~~~
+ben@ubuntu:~/Desktop/week7/lib$ vi test.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc test.c -o test
+test.c: In function ‘main’:
+test.c:14:9: warning: implicit declaration of function ‘dynamic_lib_fun_call_’ [-Wimplicit-function-declaration]
+         dynamic_lib_fun_call_();
+         ^~~~~~~~~~~~~~~~~~~~~
+test.c:15:17: error: ‘dlib’ undeclared (first use in this function); did you mean ‘div’?
+         dlclose(dlib);
+                 ^~~~
+                 div
+test.c:15:17: note: each undeclared identifier is reported only once for each function it appears in
+ben@ubuntu:~/Desktop/week7/lib$ vi test.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc test.c -o test
+test.c: In function ‘main’:
+test.c:14:9: warning: implicit declaration of function ‘dynamic_lib_fun_call_’ [-Wimplicit-function-declaration]
+         dynamic_lib_fun_call_();
+         ^~~~~~~~~~~~~~~~~~~~~
+/tmp/cciOah9F.o: In function `main':
+test.c:(.text+0x30): undefined reference to `dlopen'
+test.c:(.text+0x64): undefined reference to `dlsym'
+test.c:(.text+0x8f): undefined reference to `dynamic_lib_fun_call_'
+test.c:(.text+0x9b): undefined reference to `dlclose'
+collect2: error: ld returned 1 exit status
+ben@ubuntu:~/Desktop/week7/lib$ vi test.c
+ben@ubuntu:~/Desktop/week7/lib$ vi ../ch07.h
+ben@ubuntu:~/Desktop/week7/lib$ gcc test.c -ldl -o test
+test.c: In function ‘main’:
+test.c:14:9: warning: implicit declaration of function ‘dynamic_lib_fun_call_’ [-Wimplicit-function-declaration]
+         dynamic_lib_fun_call_();
+         ^~~~~~~~~~~~~~~~~~~~~
+/tmp/cc6GPZpO.o: In function `main':
+test.c:(.text+0x8f): undefined reference to `dynamic_lib_fun_call_'
+collect2: error: ld returned 1 exit status
+ben@ubuntu:~/Desktop/week7/lib$ vi test.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc test.c -ldl -o test
+ben@ubuntu:~/Desktop/week7/lib$ ./test
+Dynamic lib fun is called
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$  gcc -Wall -shared dlib.c -o libdlib.so
+dlib.c: In function ‘mysort’:
+dlib.c:20:1: error: expected declaration or statement at end of input
+ }
+ ^
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$  gcc -Wall -shared dlib.c -o libdlib.so
+dlib.c: In function ‘mysort’:
+dlib.c:20:9: warning: ‘return’ with a value, in function returning void
+  return 0;
+         ^
+dlib.c:6:6: note: declared here
+ void mysort(int arr[],int n)
+      ^~~~~~
+dlib.c:21:1: error: expected declaration or statement at end of input
+ }
+ ^
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$  gcc -Wall -shared dlib.c -o libdlib.so
+dlib.c: In function ‘mysort’:
+dlib.c:20:9: warning: ‘return’ with a value, in function returning void
+  return 0;
+         ^
+dlib.c:6:6: note: declared here
+ void mysort(int arr[],int n)
+      ^~~~~~
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=161870f8ff9a732b7ca15c6a275acd659955ba9b, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_dlib.c -o test_dlib -L ./ -ldlib
+gcc: error: test_dlib.c: No such file or directory
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+test_lib.c: In function ‘main’:
+test_lib.c:5:6: error: array size missing in ‘a’
+  int a[],n;
+      ^
+test_lib.c:12:11: warning: format ‘%d’ expects argument of type ‘int *’, but argument 2 has type ‘int’ [-Wformat=]
+   scanf("%d", a[i]);
+          ~^   ~~~~
+test_lib.c:14:2: warning: implicit declaration of function ‘mysort’; did you mean ‘qsort’? [-Wimplicit-function-declaration]
+  mysort(a[],n);
+  ^~~~~~
+  qsort
+test_lib.c:14:11: error: expected expression before ‘]’ token
+  mysort(a[],n);
+           ^
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+test_lib.c: In function ‘main’:
+test_lib.c:5:6: error: array size missing in ‘a’
+  int a[],n;
+      ^
+test_lib.c:12:11: warning: format ‘%d’ expects argument of type ‘int *’, but argument 2 has type ‘int’ [-Wformat=]
+   scanf("%d", a[i]);
+          ~^   ~~~~
+test_lib.c:14:2: warning: implicit declaration of function ‘mysort’; did you mean ‘qsort’? [-Wimplicit-function-declaration]
+  mysort(a,n);
+  ^~~~~~
+  qsort
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+test_lib.c: In function ‘main’:
+test_lib.c:13:11: warning: format ‘%d’ expects argument of type ‘int *’, but argument 2 has type ‘int’ [-Wformat=]
+   scanf("%d", a[i]);
+          ~^   ~~~~
+test_lib.c:15:2: warning: implicit declaration of function ‘mysort’; did you mean ‘qsort’? [-Wimplicit-function-declaration]
+  mysort(a,n);
+  ^~~~~~
+  qsort
+ben@ubuntu:~/Desktop/week7/lib$ ./test.lib
+bash: ./test.lib: No such file or directory
+ben@ubuntu:~/Desktop/week7/lib$ test_lib
+test_lib: command not found
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+./test_lib: symbol lookup error: ./test_lib: undefined symbol: dynamic_lib_fun_call
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+test_lib.c: In function ‘main’:
+test_lib.c:14:11: warning: format ‘%d’ expects argument of type ‘int *’, but argument 2 has type ‘int’ [-Wformat=]
+   scanf("%d", a[i]);
+          ~^   ~~~~
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+./test_lib: symbol lookup error: ./test_lib: undefined symbol: dynamic_lib_fun_call
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+test_lib.c: In function ‘main’:
+test_lib.c:14:11: warning: format ‘%d’ expects argument of type ‘int *’, but argument 2 has type ‘int’ [-Wformat=]
+   scanf("%d", a[i]);
+          ~^   ~~~~
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+./test_lib: symbol lookup error: ./test_lib: undefined symbol: mysort
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+dlib.c: In function ‘mysort’:
+dlib.c:20:9: warning: ‘return’ with a value, in function returning void
+  return 0;
+         ^
+dlib.c:6:6: note: declared here
+ void mysort(int arr[],int n)
+      ^~~~~~
+ben@ubuntu:~/Desktop/week7/lib$ ls
+dlib.c  libdlib.so  test  test.c  test_lib  test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=161870f8ff9a732b7ca15c6a275acd659955ba9b, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ ldd ./test_lib
+	linux-vdso.so.1 (0x00007ffde739d000)
+	libdlib.so => /usr/lib/libdlib.so (0x00007fcad276b000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fcad237a000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fcad2b6f000)
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=a48b067e2046a2bcd03072bdfbf08c662c0a10aa, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+test_lib.c: In function ‘main’:
+test_lib.c:14:11: warning: format ‘%d’ expects argument of type ‘int *’, but argument 2 has type ‘int’ [-Wformat=]
+   scanf("%d", a[i]);
+          ~^   ~~~~
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+./test_lib: symbol lookup error: ./test_lib: undefined symbol: mysort
+ben@ubuntu:~/Desktop/week7/lib$  sudo cp ./libdlib.so /usr/lib
+[sudo] password for ben: 
+Sorry, try again.
+[sudo] password for ben: 
+Sorry, try again.
+[sudo] password for ben: 
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+please input geshu:6   
+please input num:3
+Segmentation fault
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+please input geshu:6   
+please input num:4
+please input num:6
+please input num:3
+please input num:2
+please input num:6
+please input num:8
+4 3 2 6 6 8 ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib                       ls
+dlib.c  libdlib.so  test  test.c  test_lib  test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+dlib.c:21:1: error: expected identifier or ‘(’ before ‘}’ token
+ }
+ ^
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=0ae5f1729774457192549647430cf94db347d596, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ sudo cp ./libdlib.so /usr/lib
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+please input geshu:4   
+please input num:3
+please input num:2
+please input num:4
+please input num:1
+1 2 3 4 ben@ubuntu:~/Desktop/week7/lib$ vi test_lib.c
+ben@ubuntu:~/Desktop/week7/lib$ vi dlib.c
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall -shared dlib.c -o libdlib.so
+ben@ubuntu:~/Desktop/week7/lib$ file libdlib.so
+libdlib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=26c8f2a8d0d451eb5a2c3c9b5ddcdcb51e990e78, not stripped
+ben@ubuntu:~/Desktop/week7/lib$ sudo cp ./libdlib.so /usr/lib
+ben@ubuntu:~/Desktop/week7/lib$ gcc -Wall test_lib.c -o test_lib -L ./ -ldlib
+ben@ubuntu:~/Desktop/week7/lib$ ./test_lib
+please input geshu:6   
+please input num:5
+please input num:3
+please input num:4
+please input num:5
+please input num:2
+please input num:6
+2 3 4 5 5 6 
+ben@ubuntu:~/Desktop/week7/lib$ cat dlib.c test_lib.c
+#include"../ch07.h"
+void dynamic_lib_fun_call(void)
+{
+	printf("Dynamic lib fun is called\n");
+}
+void mysort(int arr[],int n)
+{
+	int m,i,j;
+	for(i=0;i<n-1;i++)
+		for(j=0;j<n-1-i;j++)
+			if(arr[j]>arr[j+1])
+			{
+				m=arr[j];
+				arr[j]=arr[j+1];
+				arr[j+1]=m;
+			}
+	for (i = 0; i < n; ++i) {
+        printf("%d ", arr[i]);
+    }
+	printf("\n");
+}
+#include"../ch07.h"
+extern void mysort(int arr[],int n);
+//extern void dynamic_lib_fun_call(void);
+int main(void)
+{	
+	int n;
+	printf("please input geshu:");
+	scanf("%d",&n);
+	int a[n];
+	for(int i=0; i<n;i++)
+	{
+		
+		printf("please input num:");
+		scanf("%d",&a[i]);
+	}
+	mysort(a,n);
+//	dynamic_lib_fun_call();
+	return 0;
+}
+
+
+
+
+
+
+
+#include"../ch07.h"
+int main()
+{
+        void *fpt=dlopen("./libdlib.so",RTLD_NOW);
+        if(!fpt){
+                printf("dlopen failed!\n");
+                exit(-1);
+        }
+        void(*fp) (void)=dlsym(fpt,"dynamic_lib_fun_call");
+        if(!fp){
+                printf("dfunc failed!\n");
+                exit(-1);
+        }
+        fp();
+        dlclose(fpt);
+        return 0;
+}
