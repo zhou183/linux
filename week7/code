@@ -340,3 +340,143 @@ int main()
         dlclose(fpt);
         return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ben@ubuntu:~/Desktop/week7$ cat 7-1.c 7-2.c
+#include"./ch07.h"
+static int g =100,k;
+void fun(void)
+{
+	
+	int x,y;
+	int *p=(int *)malloc(4);
+	printf("fun :address of x=%x,y=%x,p=%x\n",&x,&y,p);
+	sleep(20);	
+}
+int main()
+{
+	int i=0,j=0,a[10]={1};
+	static int w=100;
+	int *pt=(int *)malloc(sizeof(int)*10);
+	printf("address of g=%x,k=%x\n",&g,&k);
+	printf("address of i = %x,j=%x,a=%x\n",&i,&j,a);
+	printf("address of w = %x\n",&w);
+	printf("address of pt=%x\n",pt);
+	fun();
+	return 0;
+}	
+#include"./ch07.h"
+
+int main()
+{
+	int *pt=NULL;
+	int i,max;
+	max=1024*1024;
+	for(i=0;i<max;i++)
+	{
+		pt=(int *)malloc(i*max);
+		if(!pt)
+		{
+			perror("malloc falied!\n");
+			exit(-1);
+		}
+		else
+		{
+			printf("malloc %d MB\n",i);
+			free(pt);
+		}
+	}
+	return 0;
+}	
+ben@ubuntu:~/Desktop/week7$ ./7-1
+address of g=e6e3a010,k=e6e3a01c
+address of i = 34fb7e00,j=34fb7e04,a=34fb7e10
+address of w = e6e3a014
+address of pt=e8afd260
+fun :address of x=34fb7dd8,y=34fb7ddc,p=e8afd6a0
+
+malloc 1MB
+...
+malloc 2047 MB
+malloc falied!
+: Cannot allocate memory
+
+
+
+
+
+Normal flow!
+Enter func1!
+Enter func2!
+Back from long jump!
+ben@ubuntu:~/Desktop/week7$ cat 8-4.c
+#include"./ch07.h"
+static void func1(void);
+static void func2(void);
+static jmp_buf g_stack_env;
+int main()
+{
+	 if(setjmp(g_stack_env)==0)
+        {
+                
+		printf("Normal flow!\n");
+                func1();
+		printf("Normal flow back from func1!\n");
+
+        }else{
+                printf("Back from long jump!\n");
+        }
+        return 0;
+}
+static void func1(void)
+{
+        printf("Enter func1!\n");
+        func2();
+        printf("Leave func1!\n");
+}
+static void func2(void)
+{
+        printf("Enter func2!\n");
+        longjmp(g_stack_env,1);
+        printf("Leave func2!\n");
+}
+ben@ubuntu:~/Desktop/week7$ cat 8-3.c
+cat: 8-3.c: No such file or directory
+ben@ubuntu:~/Desktop/week7$ cat 7-3.c
+#include"./ch07.h"
+static int count=0;
+int fun(int x)
+{
+	int a=10,b=10,c=10;
+	count++;
+	printf("local a =%x,b=%x,c=%x",&a,&b,&c);
+	printf("count=%d\n",count);
+	if(x==1)
+		return 1;
+	else
+		return x+fun(x-1);
+}
+int main()
+{
+	fun(1024*1024*10);
+	return 0;
+}
+local a =563f988c,b=563f9890,c=563f9894count=130913
+local a =563f984c,b=563f9850,c=563f9854count=130914
+local a =563f980c,b=563f9810,c=563f9814count=130915
+local a =563f97cc,b=563f97d0,c=563f97d4count=130916
+local a =563f978c,b=563f9790,c=563f9794count=130917
+local a =563f974c,b=563f9750,c=563f9754count=130918
+
