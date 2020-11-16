@@ -1,0 +1,210 @@
+ben@ubuntu:~/Desktop/week9$ ls
+ch09.h
+ben@ubuntu:~/Desktop/week9$ vi 9-1.c
+ben@ubuntu:~/Desktop/week9$ vi ch09.h
+ben@ubuntu:~/Desktop/week9$ gcc 9-1.c -o 9-1
+9-1.c: In function ‘main’:
+9-1.c:8:54: warning: implicit declaration of function ‘streer’; did you mean ‘strsep’? [-Wimplicit-function-declaration]
+   fprintf(stderr,"failed to fork to fork.Reason(%s)",streer(errno));
+                                                      ^~~~~~
+                                                      strsep
+9-1.c:8:61: error: ‘errno’ undeclared (first use in this function); did you mean ‘error’?
+   fprintf(stderr,"failed to fork to fork.Reason(%s)",streer(errno));
+                                                             ^~~~~
+                                                             error
+9-1.c:8:61: note: each undeclared identifier is reported only once for each function it appears in
+9-1.c:20:2: error: expected declaration or statement at end of input
+  }
+  ^
+ben@ubuntu:~/Desktop/week9$ vi 9-1.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-1.c -o 9-1
+9-1.c: In function ‘main’:
+9-1.c:8:63: error: ‘errno’ undeclared (first use in this function); did you mean ‘error’?
+   fprintf(stderr,"failed to fork to fork.Reason(%s)",strerror(errno));
+                                                               ^~~~~
+                                                               error
+9-1.c:8:63: note: each undeclared identifier is reported only once for each function it appears in
+9-1.c:20:2: error: expected declaration or statement at end of input
+  }
+  ^
+ben@ubuntu:~/Desktop/week9$ vi 9-1.c
+ben@ubuntu:~/Desktop/week9$ vi ch09.h
+ben@ubuntu:~/Desktop/week9$ gcc 9-1.c -o 9-1
+ben@ubuntu:~/Desktop/week9$ ./9-1
+parent :pid =2170,ppid =2064 return from fork()=2171
+ben@ubuntu:~/Desktop/week9$ child : pid =2171,ppid=1
+
+ben@ubuntu:~/Desktop/week9$ vi 9-1.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-1.c -o 9-1
+ben@ubuntu:~/Desktop/week9$ ./9-1
+parent :pid =2179,ppid =2064 return from fork()=2180
+ben@ubuntu:~/Desktop/week9$ child : pid =2180,ppid=1 return from fork=0
+vi 9-1.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-1.c -o 9-1
+ben@ubuntu:~/Desktop/week9$ ./9-1
+parent :pid =2187,ppid =2064 return from fork()=2188
+ben@ubuntu:~/Desktop/week9$ child : pid =2188,ppid=1 return from fork=0
+./9-1
+
+
+ben@ubuntu:~/Desktop/week9$ cat 9-1.c
+#include"ch09.h"
+int main()
+{
+	pid_t pid;
+	pid = fork();
+	if(pid<0)
+	{
+		fprintf(stderr,"failed to fork to fork.Reason(%s)",strerror(errno));
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child : pid =%d,ppid=%d return from fork=%d\n",getpid(),getppid(),pid);
+		exit(0);
+	}
+	else 
+	{
+		printf("parent :pid =%d,ppid =%d return from fork()=%d\n",getpid(),getppid(),pid);
+		return 0;
+	}
+}
+
+
+
+ben@ubuntu:~/Desktop/week9$ ./9-2
+child : pid =2279,ppid=2278 return from fork=0
+child : init g=1,l=99,*pt=9999
+child : init g=2   a1ad2010,l=100   c5236308,*pt=10000    a2c73260
+parent :pid =2278,ppid =2064 return from fork()=2279
+parent : init g=1,l=99,*pt=9999
+parent : init g=2   a1ad2010,l=100   c5236308,*pt=10000    a2c73260
+ben@ubuntu:~/Desktop/week9$ vi ch09.h
+ben@ubuntu:~/Desktop/week9$ vi 9-2.c
+ben@ubuntu:~/Desktop/week9$ vi ch09.h
+ben@ubuntu:~/Desktop/week9$ vi 9-3.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-3.c -o 9-3
+ben@ubuntu:~/Desktop/week9$ 9-3
+9-3: command not found
+ben@ubuntu:~/Desktop/week9$ ./9-3
+falied to open ./in.txt,reason(No such file or directory)
+ben@ubuntu:~/Desktop/week9$ vi 9-3.c
+ben@ubuntu:~/Desktop/week9$ vi in.txt
+ben@ubuntu:~/Desktop/week9$ ./9-3
+2349:1
+2350:2
+2349:3
+2350:4
+2349:5
+2350:6
+2349:7
+ben@ubuntu:~/Desktop/week9$ cat out.txt
+2349 HEllo world!
+2350 HEllo world!
+2349 HEllo world!
+2350 HEllo world!
+2349 HEllo world!
+2350 HEllo world!
+2349 HEllo world!
+ben@ubuntu:~/Desktop/week9$ cat 9-3.c ch09.h
+#include"ch09.h"
+int main()
+{
+	int fd_in,fd_out;
+	char buf[1024];
+	pid_t pid;
+	memset(buf,0,1024);
+	fd_in=open(INFILE,O_RDONLY);
+	if(fd_in<0)
+	{
+		fprintf(stderr,"falied to open %s,reason(%s)\n",INFILE,strerror(errno));
+		return 1;
+	}
+	fd_out=open(OUTFILE,O_WRONLY|O_CREAT|O_TRUNC,MODE);
+	if(fd_out<0)
+	{
+		fprintf(stderr,"falied to open %s,reason(%s)\n",OUTFILE,strerror(errno));
+		return 1;
+	}
+	pid=fork();
+	if(pid<0)
+	{
+		fprintf(stderr,"falied to fork,reason(%s)\n",strerror(errno));
+		return 1;
+	}
+	while(read(fd_in,buf,2)>0)
+	{
+		printf("%d:%s",getpid(),buf);
+		sprintf(buf,"%d HEllo world!\n",getpid());
+		write(fd_out,buf,strlen(buf));
+		sleep(1);
+		memset(buf,0,1024);
+	}
+}
+
+
+
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<time.h>
+#include<setjmp.h>
+#include<wait.h>
+#include<errno.h>
+#include<dlfcn.h>
+
+#define INFILE "./in.txt"
+#define OUTFILE "./out.txt"
+#define MODE S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH
+void err_exit(char *s)
+{
+	printf("USAGE : *s is faile!\n");
+	exit(0);
+}
+
+
+
+
+
+#include"ch09.h"
+int g=1;
+int main()
+{
+	pid_t pid;
+	int l=99;
+	int *pt=malloc(sizeof(int));
+	char *string="test string";
+	*pt=9999;
+	printf("-----Before fork----\n");
+	pid = fork();
+	if(pid<0)
+	{
+		fprintf(stderr,"failed to fork to fork.Reason(%s)",strerror(errno));
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child : pid =%d,ppid=%d return from fork=%d\n",getpid(),getppid(),pid);
+		printf("child : init g=%d,l=%d,*pt=%d\n",g,l,*pt);
+		g++;l++;(*pt)++;
+		printf("child : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+
+		exit(0);
+	}
+	else 
+	{
+		sleep(2);
+		printf("parent :pid =%d,ppid =%d return from fork()=%d\n",getpid(),getppid(),pid);
+		printf("parent : init g=%d,l=%d,*pt=%d\n",g,l,*pt);
+		g++;l++;(*pt)++;           
+                printf("parent : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+		return 0;
+	}
+}
+
+
+
