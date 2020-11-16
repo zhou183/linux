@@ -208,3 +208,162 @@ int main()
 
 
 
+
+
+
+Segmentation fault
+ben@ubuntu:~/Desktop/week9$ vi 9-5.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-5.c -o 9-5
+ben@ubuntu:~/Desktop/week9$ ./9-5
+child :pid=2708,ppid=2707,i=0
+parent :pid=2707,ppid=2064,i=2708
+ben@ubuntu:~/Desktop/week9$ cat 9-5.c
+#include"ch09.h"
+int main()
+{
+	pid_t i;
+	i=vfork();
+	if(i<0)
+	{
+		perror("Vfork failed!\n");
+		exit(-1);
+	}
+	else if(i==0)
+	{
+		printf("child :pid=%d,ppid=%d,i=%d\n",getpid(),getppid(),i);
+		//return 0;
+		_exit(0);
+	}
+	else
+	{
+		wait(NULL);
+		printf("parent :pid=%d,ppid=%d,i=%d\n",getpid(),getppid(),i);
+		return 0;
+	}
+}
+
+
+
+
+ben@ubuntu:~/Desktop/week9$ cp 9-2.c 9-4.c
+ben@ubuntu:~/Desktop/week9$ vi 9-4.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-4.c -o 9-4
+9-4.c: In function ‘main’:
+9-4.c:22:32: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 3 has type ‘int *’ [-Wformat=]
+   printf("child : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+                               ~^                             ~~
+                               %ls
+9-4.c:22:42: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 5 has type ‘int *’ [-Wformat=]
+   printf("child : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+                                         ~^                        ~~
+                                         %ls
+9-4.c:22:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 7 has type ‘int *’ [-Wformat=]
+   printf("child : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+                                                      ~^
+                                                      %ls
+9-4.c:32:47: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 3 has type ‘int *’ [-Wformat=]
+                 printf("parent : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+                                              ~^                             ~~
+                                              %ls
+9-4.c:32:57: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 5 has type ‘int *’ [-Wformat=]
+                 printf("parent : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+                                                        ~^                        ~~
+                                                        %ls
+9-4.c:32:70: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 7 has type ‘int *’ [-Wformat=]
+                 printf("parent : init g=%d   %x,l=%d   %x,*pt=%d    %x\n",g,&g,l,&l,*pt,pt);
+                                                                     ~^
+                                                                     %ls
+ben@ubuntu:~/Desktop/week9$ ./9-4
+-----Before fork----
+child : pid =2722,ppid=2721 return from fork=0
+child : init g=1,l=99,*pt=9999
+child : init g=2   efd7010,l=100   250e6a10,*pt=10000    fd74260
+parent :pid =2721,ppid =2064 return from fork()=2722
+parent : init g=2,l=100,*pt=10000
+parent : init g=3   efd7010,l=101   250e6a10,*pt=10001    fd74260
+
+
+
+ben@ubuntu:~/Desktop/week9$ vi test.c
+ben@ubuntu:~/Desktop/week9$ gcc test.c -o test
+ben@ubuntu:~/Desktop/week9$ gcc 9-6.c -o 9-6
+9-6.c: In function ‘main’:
+9-6.c:4:2: warning: missing sentinel in function call [-Wformat=]
+  if(execle("./test","./test","hello","world!\n",NULL/*env_init*/)==-1)
+  ^~
+ben@ubuntu:~/Desktop/week9$ ./9-6
+./test hello world!
+
+
+ben@ubuntu:~/Desktop/week9$ vi 9-6.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-6.c -o 9-6
+ben@ubuntu:~/Desktop/week9$ ./9-6
+./test hello world!
+ USER=stu
+PATH=/tmp
+ben@ubuntu:~/Desktop/week9$ cat 9-6.c test.c
+#include"ch09.h"
+char *env_init[]={"USER=stu","PATH=/tmp",NULL};
+int main()
+{
+	if(execle("./test","./test","hello","world!\n",NULL,env_init)==-1)
+	{
+		perror("execve!\n");
+		exit(EXIT_FAILURE);
+	}
+	puts("Never get here!\n");
+	exit(EXIT_SUCCESS);
+}
+
+#include"ch09.h"
+int main(int argc,char *argv[])
+{
+	extern char **environ;
+	char **env=environ;
+	int i;
+	for(i=0;i<argc;i++)
+	{
+		printf("%s ",argv[i]);
+	}
+	while(*env)
+	{
+		printf("%s\n",*env);
+		env++;
+	}
+	exit(EXIT_SUCCESS);
+	//printf("%s %s",argv[1],argv[2]);
+	//return 0;
+}
+
+
+
+en@ubuntu:~/Desktop/week9$ vi 9-7.c
+ben@ubuntu:~/Desktop/week9$ gcc 9-7.c -o 9-7
+ben@ubuntu:~/Desktop/week9$ ./9-7
+child :pid=2829,ppid=2828
+child 2829 is normal back.The exit code =23
+ben@ubuntu:~/Desktop/week9$ cat 9-7.c
+#include"ch09.h"
+int main()
+{
+	int pid;
+	int s;
+	pid=fork();
+	if(pid<0)
+	{
+		perror("Fork failed!\n");
+	}
+	else if(pid==0)
+	{
+		printf("child :pid=%d,ppid=%d\n",getpid(),getppid());
+		exit(23);
+	}
+	else
+	{
+		int y;
+		y=wait(&s);
+		if(WIFEXITED(s))
+			printf("child %d is normal back.The exit code =%d\n",y,WEXITSTATUS(s));
+		return 0;
+	}
+}
