@@ -199,3 +199,336 @@ int main()
 		}
 	}
 }
+
+
+
+ben@ubuntu:~/Desktop/week11$ ./11-2
+child2:pid=2795,ppid=2793
+child:pid=2794,ppid=2793
+parent wait for child1 2794:exit code 0
+pid 2795 exit with signal 9
+parent finshed!
+ben@ubuntu:~/Desktop/week11$ cat 11-2.c
+#include"ch11.h"
+int main()
+{
+	pid_t pid;
+	pid=fork();
+	if(pid<0)
+	{
+		perror("fork pid error!\n");
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child:pid=%d,ppid=%d\n",getpid(),getppid());
+		exit(0);
+	}
+	else
+	{
+		pid_t y;
+		y=fork();
+		if(y<0)
+		{
+			perror("fork error!\n");
+			exit(-1);
+		}
+		else if(y==0)
+		{
+			printf("child2:pid=%d,ppid=%d\n",getpid(),getppid());
+			while(1);
+			exit(0);
+		}
+		else
+		{
+			int s1,s2,r1,r2;
+			r1=wait(&s1);
+			r2=wait(&s2);
+			if(WIFEXITED(s1))
+			{
+				printf("parent wait for child1 %d:exit code %d\n",r1,WEXITSTATUS(s1));
+			}
+			else
+			{
+				if(WIFSIGNALED(s1))
+					printf("pid %d exit with signal %d\n",r1,WTERMSIG(s1));
+                        }
+			if(WIFEXITED(s2))
+                        {
+                                printf("parent wait for child1 %d:exit code %d\n",r2,WEXITSTATUS(s2));
+                        }
+                        else
+                        {
+                                if(WIFSIGNALED(s2))
+                                        printf("pid %d exit with signal %d\n",r2,WTERMSIG(s2));
+                        }
+			printf("parent finshed!\n");
+		}
+	}
+}
+
+
+
+
+ben@ubuntu:~/Desktop$ cd week11
+ben@ubuntu:~/Desktop/week11$ cat my.h my.c 11-6.c
+#include"ch11.h"
+void prtinfo(char* description,int fd,pid_t pid)
+{
+        char* current_time;
+        FILE* fp;
+        current_time = (char*)malloc(100);
+        time_t timer;
+        struct tm *tblock;
+        timer = time(NULL);
+        tblock = localtime(&timer);
+        current_time = asctime(tblock);
+        fp = fdopen(fd,"w");
+        if(fp==NULL)
+        {
+                printf("fp is NULL\n");
+                perror("fdopen error\n");
+        }
+        fprintf(fp,"%s\t%d\t%s",description,pid,current_time);
+        fflush(fp);
+        fclose(fp);
+}
+
+#include"ch11.h"
+void prtinfo(char* description,int fd,pid_t pid)
+{
+        char* current_time;
+        FILE* fp;
+        current_time = (char*)malloc(100);
+        time_t timer;
+        struct tm *tblock;
+        timer = time(NULL);
+        tblock = localtime(&timer);
+        current_time = asctime(tblock);
+        fp = fdopen(fd,"w");
+        if(fp==NULL)
+        {
+                printf("fp is NULL\n");
+                perror("fdopen error\n");
+        }
+        fprintf(fp,"%s\t%d\t%s",description,pid,current_time);
+        fflush(fp);
+        fclose(fp);
+}
+#include"my.h"
+int main()
+{       
+	FILE *fp;
+	int fd;
+	pid_t pid1;
+	char buf[1024]={0};
+	fd = open("log.dat",O_RDWR|O_CREAT|O_APPEND,0644);
+	fp = fopen("log.dat","r");
+	pid1=fork();
+	if(pid1<0)
+	{
+		perror("fork pid1 failed!\n");
+	}
+	else if(pid1==0)
+	{
+		pid_t pid11;
+		pid11=fork();
+		if(pid11<0)
+		{
+			perror("fork pid11 failed!\n");
+		}
+		else if(pid11==0)
+		{
+			prtinfo("child11",fd,getpid());
+
+		}
+		else
+		{
+			waitpid(pid11,0,0);
+			prtinfo("child1",fd,getpid());
+		}
+	}
+	else
+	{
+		pid_t pid2;
+		pid2=fork();
+		if(pid2<0)
+		{
+			perror("fork pid2 failed!\n");
+		}
+		else if(pid2==0)
+		{
+			pid_t pid21;
+			pid21=fork();
+			if(pid21<0)
+			{
+				perror("fork pid21 failed!\n");
+			}
+			else if(pid21==0)
+			{
+				prtinfo("child21",fd,getpid());
+			}
+			else
+			{
+				waitpid(pid21,0,0);
+				prtinfo("child2",fd,getpid());
+
+			}
+
+		}
+		else
+		{
+			waitpid(pid1,0,0);
+			waitpid(pid2,0,0);
+			prtinfo("parent",fd,getpid());
+			for(int j=0;j<5;j++) 
+			{ 
+				fgets(buf,1024,fp); 
+				printf("%s\n", buf); //输出
+			}
+		}
+
+
+	}
+	return 0;
+}
+ben@ubuntu:~/Desktop/week11$ cat 11-4.c
+#include"ch11.h"
+int main()
+{
+	pid_t pid;
+	pid=fork();
+	if(pid<0)
+	{
+		perror("fork pid error!\n");
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child:pid=%d,ppid=%d\n",getpid(),getppid());
+		exit(0);
+	}
+	else
+	{
+		pid_t y;
+		y=fork();
+		if(y<0)
+		{
+			perror("fork error!\n");
+			exit(-1);
+		}
+		else if(y==0)
+		{
+			printf("child2:pid=%d,ppid=%d\n",getpid(),getppid());
+			while(1);
+			exit(0);
+		}
+		else
+		{
+			int s1,s2,r1,r2;
+			r1=waitpid(y,&s1,0);
+			r2=waitpid(pid,&s2,0);
+			if(WIFEXITED(s1))
+			{
+				printf("parent wait for child1 %d:exit code %d\n",r1,WEXITSTATUS(s1));
+			}
+			else
+			{
+				if(WIFSIGNALED(s1))
+					printf("pid %d exit with signal %d\n",r1,WTERMSIG(s1));
+                        }
+			if(WIFEXITED(s2))
+                        {
+                                printf("parent wait for child1 %d:exit code %d\n",r2,WEXITSTATUS(s2));
+                        }
+                        else
+                        {
+                                if(WIFSIGNALED(s2))
+                                        printf("pid %d exit with signal %d\n",r2,WTERMSIG(s2));
+                        }
+			printf("parent finshed!\n");
+		}
+	}
+}
+
+ben@ubuntu:~/Desktop/week11$ ./11-4
+child2:pid=3728,ppid=3726
+child:pid=3727,ppid=3726
+^C
+ben@ubuntu:~/Desktop/week11$ ./11-5
+child2:pid=3732,ppid=3730
+child:pid=3731,ppid=3730
+parent wait for child1 3731:exit code 0
+pid 0 exit with signal 104
+parent finshed!
+ben@ubuntu:~/Desktop/week11$ cat 11-5.c
+#include"ch11.h"
+int main()
+{
+	pid_t pid;
+	pid=fork();
+	if(pid<0)
+	{
+		perror("fork pid error!\n");
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child:pid=%d,ppid=%d\n",getpid(),getppid());
+		exit(0);
+	}
+	else
+	{
+		pid_t y;
+		y=fork();
+		if(y<0)
+		{
+			perror("fork error!\n");
+			exit(-1);
+		}
+		else if(y==0)
+		{
+			printf("child2:pid=%d,ppid=%d\n",getpid(),getppid());
+			while(1);
+			exit(0);
+		}
+		else
+		{
+			int s1,s2,r1,r2;
+			r1=waitpid(pid,&s1,0);
+			r2=waitpid(y,&s2,WNOHANG);
+			if(WIFEXITED(s1))
+			{
+				printf("parent wait for child1 %d:exit code %d\n",r1,WEXITSTATUS(s1));
+			}
+			else
+			{
+				if(WIFSIGNALED(s1))
+					printf("pid %d exit with signal %d\n",r1,WTERMSIG(s1));
+                        }
+			if(WIFEXITED(s2))
+                        {
+                                printf("parent wait for child1 %d:exit code %d\n",r2,WEXITSTATUS(s2));
+                        }
+                        else
+                        {
+                                if(WIFSIGNALED(s2))
+                                        printf("pid %d exit with signal %d\n",r2,WTERMSIG(s2));
+                        }
+			printf("parent finshed!\n");
+		}
+	}
+}
+ben@ubuntu:~/Desktop/week11$ ./11-6
+child21	3644	Mon Nov 30 16:52:52 2020
+
+child2	3643	Mon Nov 30 16:52:52 2020
+
+child11	3645	Mon Nov 30 16:52:52 2020
+
+child1	3642	Mon Nov 30 16:52:52 2020
+
+parent	3640	Mon Nov 30 16:52:52 2020
+
+ben@ubuntu:~/Desktop/week11$ 
+
