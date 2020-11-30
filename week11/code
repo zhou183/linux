@@ -1,0 +1,201 @@
+ben@ubuntu:~/Desktop$ mkdir week11
+ben@ubuntu:~/Desktop$ cd week11
+ben@ubuntu:~/Desktop/week11$ cp ../week10/ch10.h ./week11/ch11.h
+cp: cannot create regular file './week11/ch11.h': No such file or directory
+ben@ubuntu:~/Desktop/week11$ cp ../week10/ch10.h /week11/ch11.h
+cp: cannot create regular file '/week11/ch11.h': No such file or directory
+ben@ubuntu:~/Desktop/week11$ cp ../week10/ch10.h ../week11/ch11.h
+ben@ubuntu:~/Desktop/week11$ ls
+ch11.h
+ben@ubuntu:~/Desktop/week11$ gedit 11-1.c
+
+Command 'gedit' not found, but can be installed with:
+
+sudo snap install gedit  # version 3.32.0+git22.7559e64e5, or
+sudo apt  install gedit
+
+See 'snap info gedit' for additional versions.
+
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-1.c -o 11-1
+ben@ubuntu:~/Desktop/week11$ ./11-1
+child:pid=1916,ppid=1915
+parent:exit code 88
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-1.c -o 11-1
+ben@ubuntu:~/Desktop/week11$ ./11-1
+child2:pid=2088,ppid=2086
+parent:exit code 0,r1=2088
+child:pid=2087,ppid=2086
+parent:exit code 0,r2=2087
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-1.c -o 11-1
+ben@ubuntu:~/Desktop/week11$ ./11-1
+child2:pid=2488,ppid=2486
+child:pid=2487,ppid=2486
+parent wait for child1 2487:exit code 0
+parent wait for child1 2488:exit code 0
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-1.c -o 11-1
+ben@ubuntu:~/Desktop/week11$ ./11-1
+child2:pid=2498,ppid=2496
+child:pid=2497,ppid=2496
+parent wait for child1 2497:exit code 0
+parent wait for child1 2497:exit code 0
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-1.c -o 11-1
+ben@ubuntu:~/Desktop/week11$ ./11-1
+child2:pid=2509,ppid=2507
+child:pid=2508,ppid=2507
+parent wait for child1 2508:exit code 0
+parent wait for child1 2508:exit code 0
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-1.c -o 11-1
+ben@ubuntu:~/Desktop/week11$ ./11-1
+child2:pid=2518,ppid=2516
+child:pid=2517,ppid=2516
+parent wait for child2 2518:exit code 0
+parent wait for child1 2517:exit code 0
+ben@ubuntu:~/Desktop/week11$ edit 11-2.c
+ben@ubuntu:~/Desktop/week11$ ls
+11-1  11-1.c  ch11.h
+ben@ubuntu:~/Desktop/week11$ vi 11-1.c
+ben@ubuntu:~/Desktop/week11$ cp 11-1.c 11-2.c
+ben@ubuntu:~/Desktop/week11$ vi 11-2.c
+ben@ubuntu:~/Desktop/week11$ gcc 11-2.c -o 11-2
+In file included from /usr/include/stdlib.h:40:0,
+                 from ch11.h:7,
+                 from 11-2.c:1:
+11-2.c: In function ‘main’:
+11-2.c:36:7: error: invalid operands to binary & (have ‘int *’ and ‘int’)
+    if(WIFEXITED(&s1))
+       ^
+11-2.c:42:8: error: invalid operands to binary & (have ‘int *’ and ‘int’)
+     if(WIFSIGNALED(&s1))
+        ^
+11-2.c:43:47: error: invalid operands to binary & (have ‘int *’ and ‘int’)
+      printf("pid %d exit with signal %d\n",r1,WTERMSIG(&s1));
+                                               ^
+11-2.c:45:7: error: invalid operands to binary & (have ‘int *’ and ‘int’)
+    if(WIFEXITED(&s2))
+       ^
+11-2.c:51:36: error: invalid operands to binary & (have ‘int *’ and ‘int’)
+                                 if(WIFSIGNALED(&s2))
+                                    ^
+11-2.c:52:82: error: invalid operands to binary & (have ‘int *’ and ‘int’)
+                              printf("pid %d exit with signal %d\n",r2,WTERMSIG(&s2));
+                                                                       ^
+ben@ubuntu:~/Desktop/week11$ vi 11-2.c
+ben@ubuntu:~/Desktop/week11$ cat 11-1.c 11-2.c
+#include"ch11.h"
+int main()
+{
+	pid_t pid;
+	pid=fork();
+	if(pid<0)
+	{
+		perror("fork pid error!\n");
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child:pid=%d,ppid=%d\n",getpid(),getppid());
+		exit(0);
+	}
+	else
+	{
+		pid_t y;
+		y=fork();
+		if(y<0)
+		{
+			perror("fork error!\n");
+			exit(-1);
+		}
+		else if(y==0)
+		{
+			printf("child2:pid=%d,ppid=%d\n",getpid(),getppid());
+			exit(0);
+		}
+		else
+		{
+			int s1,s2,r1,r2;
+			r1=wait(&s1);
+			r2=wait(&s2);
+			if(r1==pid)
+			{
+				printf("parent wait for child1 %d:exit code %d\n",r1,WEXITSTATUS(s1));
+			}
+			else
+			{
+				printf("parent wait for child2 %d:exit code %d\n",r1,WEXITSTATUS(s1));
+			}
+			 if(r2==pid)
+                        {
+                                printf("parent wait for child1 %d:exit code %d\n",r2,WEXITSTATUS(s1));
+                        }
+                        else
+                        {
+                                printf("parent wait for child2 %d:exit code %d\n",r2,WEXITSTATUS(s2));
+                        }
+			return 0;
+		}
+	}
+}
+
+#include"ch11.h"
+int main()
+{
+	pid_t pid;
+	pid=fork();
+	if(pid<0)
+	{
+		perror("fork pid error!\n");
+		exit(-1);
+	}
+	else if(pid==0)
+	{
+		printf("child:pid=%d,ppid=%d\n",getpid(),getppid());
+		exit(0);
+	}
+	else
+	{
+		pid_t y;
+		y=fork();
+		if(y<0)
+		{
+			perror("fork error!\n");
+			exit(-1);
+		}
+		else if(y==0)
+		{
+			printf("child2:pid=%d,ppid=%d\n",getpid(),getppid());
+			while(1);
+			exit(0);
+		}
+		else
+		{
+			int s1,s2,r1,r2;
+			r1=wait(&s1);
+			r2=wait(&s2);
+			if(WIFEXITED(&s1))
+			{
+				printf("parent wait for child1 %d:exit code %d\n",r1,WEXITSTATUS(s1));
+			}
+			else
+			{
+				if(WIFSIGNALED(&s1))
+					printf("pid %d exit with signal %d\n",r1,WTERMSIG(&s1));
+                        }
+			if(WIFEXITED(&s2))
+                        {
+                                printf("parent wait for child1 %d:exit code %d\n",r2,WEXITSTATUS(s2));
+                        }
+                        else
+                        {
+                                if(WIFSIGNALED(&s2))
+                                        printf("pid %d exit with signal %d\n",r2,WTERMSIG(&s2));
+                        }
+			printf("parent finshed!\n");
+		}
+	}
+}
