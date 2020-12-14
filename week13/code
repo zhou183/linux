@@ -232,3 +232,133 @@ void err_exit(char *s)
 	printf("USAGE : *s is faile!\n");
 	exit(0);
 }
+
+
+
+ben@ubuntu:~/week13$ cat ch13.h 13-3.c 13-3-2.c
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<time.h>
+#include<setjmp.h>
+#include<wait.h>
+#include<errno.h>
+#include<dlfcn.h>
+
+#define SERVER_FIFO_NAME "./server_fifo"
+#define CLIENT_FIFO_NAME "./client_%d_fifo"
+#define BUFFER_SIZE 132
+#define PIPE_BUF 100
+#define FIFO_FILE "./testfifo"
+#define TEN_MEG 1000
+#define INFILE "./in.txt"
+#define OUTFILE "./out.txt"
+#define MODE S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH
+struct data_to_pass {  
+    pid_t  client_pid; 
+    char  data[BUFFER_SIZE];
+};
+void err_exit(char *s)
+{
+	printf("USAGE : *s is faile!\n");
+	exit(0);
+}
+
+                                                                                                                                    
+ 
+#include "ch13.h"
+int main()
+{
+   int server_fifo_fd, client_fifo_fd;
+   struct data_to_pass my_data;
+   int nbytes;
+   char client_fifo_name[256], *tmp_char_ptr;
+   mkfifo(SERVER_FIFO_NAME, 0777);
+   server_fifo_fd = open(SERVER_FIFO_NAME, O_RDONLY);
+   if (server_fifo_fd == -1) 
+       err_exit("Server fifo failure!\n");
+   do { 
+       nbytes = read(server_fifo_fd, &my_data, sizeof(my_data));
+       if (nbytes > 0) { 
+           tmp_char_ptr = my_data.data;
+          while (*tmp_char_ptr) {
+             if (isupper(*tmp_char_ptr))
+                *tmp_char_ptr = tolower(*tmp_char_ptr);
+             else if  (islower(*tmp_char_ptr))
+                *tmp_char_ptr = toupper(*tmp_char_ptr);
+             else if (*tmp_char_ptr == '\n')
+                *tmp_char_ptr = '\0';
+             tmp_char_ptr++;
+          }
+           sprintf(client_fifo_name, CLIENT_FIFO_NAME, my_data.client_pid);
+           client_fifo_fd = open(client_fifo_name, O_WRONLY);
+           if (client_fifo_fd != -1) {
+               write(client_fifo_fd, &my_data, sizeof(my_data));
+               close(client_fifo_fd);
+           }
+       }
+   } while (nbytes > 0);
+   close(server_fifo_fd);
+   unlink(SERVER_FIFO_NAME);
+   return 0;  
+}
+
+#include "ch13.h"
+int main()
+{
+   int server_fifo_fd, client_fifo_fd;
+   struct data_to_pass my_request;
+   char client_fifo_name[256];
+   pid_t mypid;   
+   server_fifo_fd = open(SERVER_FIFO_NAME, O_WRONLY);
+   if (server_fifo_fd == -1) 
+       err_exit("Sorry, no server");
+   mypid = getpid();
+   sprintf(client_fifo_name, CLIENT_FIFO_NAME, mypid);
+   if (mkfifo(client_fifo_name, 0777) == -1)
+       err_exit(client_fifo_name);
+   while (1) {
+       printf ("Enter your request:");
+       memset(my_request.data,0,BUFFER_SIZE);
+       fgets (my_request.data, BUFFER_SIZE, stdin);
+       if (strcmp(my_request.data,"bye\n")==0
+                      ||strcmp(my_request.data, "BYE\n")==0)
+           break;
+       my_request.client_pid = mypid;
+       write(server_fifo_fd, &my_request, sizeof(my_request));
+       client_fifo_fd = open (client_fifo_name, O_RDONLY);
+       if (client_fifo_fd != -1) {
+           if (read (client_fifo_fd, &my_request, sizeof(my_request)) > 0) {
+               printf ("---I get answer: %s\n", my_request.data);
+           }
+           close(client_fifo_fd); 
+       }
+    }  
+    close(server_fifo_fd);
+    unlink(CLIENT_FIFO_NAME);
+    exit(EXIT_SUCCESS);
+}
+
+ben@ubuntu:~/week13$ ./13-3-2
+Enter your request:dsa
+---I get answer: DSA
+Enter your request:fsdSS
+---I get answer: FSDss
+Enter your request:fbye
+---I get answer: FBYE
+Enter your request:bye
+ben@ubuntu:~/week13$ ./13-3-2
+Enter your request:12xz
+---I get answer: 12XZ
+Enter your request:fsafDSD
+---I get answer: FSAFdsd
+Enter your request:faf
+---I get answer: FAF
+Enter your request:BYE
+ben@ubuntu:~/week13$ 
+
+
