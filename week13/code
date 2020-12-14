@@ -1,0 +1,234 @@
+ben@ubuntu:~/Desktop$ cd ..
+ben@ubuntu:~$ mkdir week13
+ben@ubuntu:~$ cd week13
+ben@ubuntu:~/week13$ cp ../week11/ch11.h ./ch13.h
+ben@ubuntu:~/week13$ ls
+ch13.h
+ben@ubuntu:~/week13$ vi 13-1.c
+ben@ubuntu:~/week13$ vi ch13.h
+ben@ubuntu:~/week13$ gcc -g 13-1.c -o 13-1
+13-1.c: In function ‘write_data’:
+13-1.c:11:41: error: expected ‘;’ before ‘)’ token
+   err_exit("Output to stream failed.\n"));
+                                         ^
+13-1.c:11:41: error: expected statement before ‘)’ token
+ben@ubuntu:~/week13$ vi 13-1.c
+ben@ubuntu:~/week13$ gcc -g 13-1.c -o 13-1
+ben@ubuntu:~/week13$ ./13-1
+line  0
+line  1
+line  2
+line  3
+line  4
+line  5
+line  6
+line  7
+line  8
+line  9
+line 10
+line 11
+line 12
+line 13
+line 14
+line 15
+line 16
+line 17
+line 18
+line 19
+line 20
+--More--
+
+ben@ubuntu:~/week13$ vi 13-1.c
+ben@ubuntu:~/week13$ gcc -g 13-1.c -o 13-1
+ben@ubuntu:~/week13$ ./13-1
+line  0
+line  1
+line  2
+line  3
+line  4
+line  5
+line  6
+line  7
+line  8
+line  9
+line 10
+line 11
+line 12
+line 13
+line 14
+line 15
+line 16
+line 17
+line 18
+line 19
+line 20
+line 21
+line 22
+line 23
+line 24
+line 25
+line 26
+line 27
+line 28
+line 29
+line 30
+line 31
+line 32
+line 33
+line 34
+line 35
+line 36
+line 37
+line 38
+line 39
+line 40
+line 41
+line 42
+line 43
+line 44
+line 45
+line 46
+line 47
+line 48
+line 49
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ mknod myfifo p
+ben@ubuntu:~/week13$ ls -l
+total 20
+-rwxrwxr-x 1 ben ben 11728 Dec 14 09:56 13-1
+-rw-rw-r-- 1 ben ben   363 Dec 14 09:52 13-1.c
+-rw-rw-r-- 1 ben ben  2029 Dec 14 09:52 ch13.h
+prw-rw-r-- 1 ben ben     0 Dec 14 10:38 myfifo
+ben@ubuntu:~/week13$ cat <myfifo
+
+hello world
+ben@ubuntu:~/week13$ 
+ben@ubuntu:~/week13$ vi ch13.h
+ben@ubuntu:~/week13$ vi 13-2.c
+ben@ubuntu:~/week13$ gcc -g 13-2.c -o 13-2
+ben@ubuntu:~/week13$ ./13-2
+ds
+da
+^C
+ben@ubuntu:~/week13$ cat FIFO_FILE
+cat: FIFO_FILE: No such file or directory
+ben@ubuntu:~/week13$ ls
+13-1  13-1.c  13-2  13-2.c  ch13.h  myfifo  testfifo
+ben@ubuntu:~/week13$ cat testfifo
+hello world
+ben@ubuntu:~/week13$ ./13-2
+process 2486 opened: ./testfifo
+2486 received 12 bytes
+process 2486 received total 12 bytes
+ben@ubuntu:~/week13$ ls -l
+total 36
+-rwxrwxr-x 1 ben ben 11728 Dec 14 09:56 13-1
+-rw-rw-r-- 1 ben ben   363 Dec 14 09:52 13-1.c
+-rwxrwxr-x 1 ben ben 11768 Dec 14 10:57 13-2
+-rw-rw-r-- 1 ben ben   629 Dec 14 10:57 13-2.c
+-rw-rw-r-- 1 ben ben  2102 Dec 14 10:48 ch13.h
+prw-rw-r-- 1 ben ben     0 Dec 14 10:40 myfifo
+prw-rw-r-- 1 ben ben     0 Dec 14 11:01 testfifo
+ben@ubuntu:~/week13$ ^C
+ben@ubuntu:~/week13$ 
+
+
+ben@ubuntu:~/Desktop$ echo "hello world"
+hello world
+ben@ubuntu:~/Desktop$ echo "hello world">myfifo
+ben@ubuntu:~/Desktop$ cd ..
+ben@ubuntu:~$ echo "hello world">week13/myfifo
+ben@ubuntu:~$ echo "hello world">week13/myfifo
+^[[A^C
+ben@ubuntu:~$ echo "hello world">week13/testfifo
+ben@ubuntu:~$ echo "hello world">./week13/testfifo
+ben@ubuntu:~$ 
+
+
+ben@ubuntu:~/week13$ cat 13-1.c 13-2.c ch13.h
+#include"ch13.h"
+void write_data(FILE * stream)
+{
+	int i;
+	for(i=0;i<50;i++)
+	{
+		fprintf(stream,"line %2d\n",i);
+	}
+	if(ferror(stream))
+	{
+		err_exit("Output to stream failed.\n");
+	}
+}
+int main(void)
+{
+	FILE *output;
+	output=popen("more -10","w");
+	if(!output)
+		err_exit("Could not run more.\n");
+	write_data(output);
+	pclose(output);
+	return EXIT_SUCCESS;
+}
+
+#include"ch13.h"
+int main(void)
+{
+	int fifo_fd,n,total_bytes=0;
+	char readbuf[PIPE_BUF];
+	if(access(FIFO_FILE,F_OK)==-1)
+		if(mkfifo(FIFO_FILE,0666)!=0)
+		{
+			printf("Could not create fifo %s\n",FIFO_FILE);
+			exit(EXIT_FAILURE);
+		}
+	if((fifo_fd=open(FIFO_FILE,O_RDONLY))<0)
+	{
+		printf("Could not open fifo %s\n",FIFO_FILE);
+		exit(EXIT_FAILURE);
+	}
+	printf("process %d opened: %s\n",getpid(),FIFO_FILE);
+	while((n=read(fifo_fd,readbuf,PIPE_BUF))>0)
+	{
+		printf("%d received %d bytes\n",getpid(),n);
+		total_bytes+=n;
+	}
+	close(fifo_fd);
+	printf("process %d received total %d bytes\n",getpid(),total_bytes);
+	return 0;
+}
+
+			
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<time.h>
+#include<setjmp.h>
+#include<wait.h>
+#include<errno.h>
+#include<dlfcn.h>
+
+#define PIPE_BUF 100
+#define FIFO_FILE "./testfifo"
+#define TEN_MEG 1000
+#define INFILE "./in.txt"
+#define OUTFILE "./out.txt"
+#define MODE S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH
+void err_exit(char *s)
+{
+	printf("USAGE : *s is faile!\n");
+	exit(0);
+}
