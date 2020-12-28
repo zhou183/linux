@@ -1,0 +1,177 @@
+ben@ubuntu:~/Desktop$ cd ..
+ben@ubuntu:~$ mkdir week14
+ben@ubuntu:~$ cd week14
+ben@ubuntu:~/week14$ cp ../week13/ch13.h ./ch14.h
+ben@ubuntu:~/week14$ ls
+ch14.h
+ben@ubuntu:~/week14$ vi ch14.h
+ben@ubuntu:~/week14$ vi 14-1.c
+ben@ubuntu:~/week14$ gcc 14-1.c -o 14-1
+14-1.c: In function ‘main’:
+14-1.c:12:41: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 4 has type ‘key_t {aka int}’ [-Wformat=]
+  printf("st_dev =%lx,st_inode=%lx,key=%lx\n",stat_buf.st_dev,stat_buf.st_ino,key);
+                                       ~~^
+                                       %x
+ben@ubuntu:~/week14$ vi 14-1.c
+ben@ubuntu:~/week14$ gcc 14-1.c -o 14-1
+ben@ubuntu:~/week14$ ./14-1 ./ch14.h
+st_dev =801,st_inode=6c0480,key=34010480
+ben@ubuntu:~/week14$ cat ch14.h 14-1.c
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<time.h>
+#include<setjmp.h>
+#include<wait.h>
+#include<errno.h>
+#include<dlfcn.h>
+#include<sys/ipc.h>
+#include<sys/msg.h>
+
+#define SERVER_FIFO_NAME "./server_fifo"
+#define CLIENT_FIFO_NAME "./client_%d_fifo"
+#define BUFFER_SIZE 132
+#define PIPE_BUF 100
+#define FIFO_FILE "./testfifo"
+#define TEN_MEG 1000
+#define INFILE "./in.txt"
+#define OUTFILE "./out.txt"
+#define MODE S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH
+struct data_to_pass {  
+    pid_t  client_pid; 
+    char  data[BUFFER_SIZE];
+};
+void err_exit(char *s)
+{
+	printf("USAGE : *s is faile!\n");
+	exit(0);
+}
+
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                     
+                                                                                                                                        
+ 
+#include"ch14.h"
+int main(int argc,char *argv[])
+{
+	struct stat stat_buf;
+	if(argc!=2)
+	{
+		fprintf(stderr,"Usage : ftok <pathname>");
+		return 1;
+	}
+	stat(argv[1],&stat_buf);
+	key_t key=ftok(argv[1],0x1234);
+	printf("st_dev =%lx,st_inode=%lx,key=%x\n",stat_buf.st_dev,stat_buf.st_ino,key);
+	return 0;
+}
+ben@ubuntu:~/week14$ ./msg-c
+Enter some text:	dsad
+Enter some text:	hellodsf
+Enter some text:	end
+ben@ubuntu:~/week14$ cat ch14.h msg-c.c msg-s.c
+#include<stdio.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<time.h>
+#include<setjmp.h>
+#include<wait.h>
+#include<errno.h>
+#include<dlfcn.h>
+#include<sys/ipc.h>
+#include<sys/msg.h>
+
+#define SERVER_FIFO_NAME "./server_fifo"
+#define CLIENT_FIFO_NAME "./client_%d_fifo"
+#define BUFFER_SIZE 132
+#define PIPE_BUF 100
+#define FIFO_FILE "./testfifo"
+#define TEN_MEG 1000
+#define INFILE "./in.txt"
+#define OUTFILE "./out.txt"
+#define MODE S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH
+struct data_to_pass {  
+    pid_t  client_pid; 
+    char  data[BUFFER_SIZE];
+};
+void err_exit(char *s)
+{
+	printf("USAGE : %s is failed!\n",s);
+	exit(0);
+}
+struct my_msg{
+	long int my_msg_type;
+	char text[BUFSIZ];
+};
+#include"ch14.h"
+int main()
+{
+	int msgid,running=1;
+	struct my_msg msgbuf;
+	struct msqid_ds buf;
+	msgid =msgget((key_t)1234, 0666|IPC_CREAT);
+	if(msgid==-1)
+		err_exit("msgget failed\n");
+	while(running)
+	{
+		printf("Enter some text:\t");
+		fgets(msgbuf.text,BUFSIZ,stdin);
+		msgbuf.my_msg_type = (long int)msgbuf.text[0];
+		if(msgsnd(msgid,(void *)&msgbuf,sizeof(msgbuf.text),IPC_NOWAIT)==-1)
+			err_exit("msgsnd failed\n");
+		if(strncmp(msgbuf.text,"end",3)==0)
+			running=0;
+	}
+	exit(EXIT_SUCCESS);
+}
+#include "ch14.h"
+
+int main(void)
+{
+	int running=1,msgid;
+	struct my_msg msgbuf;
+	long int msg_type = -57;
+	if((msgid=msgget((key_t)1234,0666|IPC_CREAT))==-1)
+		err_exit("msgget failed\n");
+	while(running)
+	{
+		if(msgrcv(msgid,(void*)&msgbuf,BUFSIZ,-57,IPC_NOWAIT)!=-1)
+			printf("You wrote:%s",msgbuf.text);
+		else if(errno==ENOMSG&&msgrcv(msgid,(void*)&msgbuf,BUFSIZ,0,0)!=-1)
+			printf("You wrote :%s",msgbuf.text);
+		else
+			err_exit("msgrcv failed\n");
+		if(strncmp(msgbuf.text,"end",3)==0)
+			break;
+	}
+	if(msgctl(msgid,IPC_RMID,0)==-1)
+		err_exit("msgctl(IPC_RMID) failed\n");
+	exit(EXIT_SUCCESS);
+}
+
+
+
+
+ben@ubuntu:~/week14$ vi ch14.h
+ben@ubuntu:~/week14$ ./msg-s
+You wrote :dsad
+You wrote :hellodsf
+You wrote :end
+ben@ubuntu:~/week14$ 
